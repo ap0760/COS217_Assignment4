@@ -15,7 +15,11 @@
    Returns 0. */
 int main(void)
 {
+<<<<<<< HEAD
    char *temp;
+=======
+  char* temp;
+>>>>>>> 5e4b7f9c2d5dbd4860c063af44389454cab990cd
 
    /* Before the data structure is initialized:
     * insert, rm, and destroy should each return INITIALIZATION_ERROR
