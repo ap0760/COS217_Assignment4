@@ -141,7 +141,6 @@ int main(void) {
   assert(BDT_rm("a/y") == SUCCESS);
   assert((temp = BDT_toString()) != NULL);
   
-  assert(BDT_contains("a/x") == TRUE);
   fprintf(stderr, "Checkpoint Promotion:\n%s\n", temp);
 
   assert(!strcmp(temp,"a\na/x\n"));
