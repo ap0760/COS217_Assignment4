@@ -13,7 +13,8 @@
 /* Tests the BDT implementation with an assortment of checks.
    Prints the status of the data structure along the way to stderr.
    Returns 0. */
-int main(void) {
+int main(void)
+{
   char* temp;
 
   /* Before the data structure is initialized:
