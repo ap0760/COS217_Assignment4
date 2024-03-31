@@ -127,6 +127,7 @@ int main(void)
    /* removing a first child should cause the second child to become
       the first child and remain so until it is itself removed. */
 
+<<<<<<< HEAD
    /* Debugging: you may want to add this line before any failing
       assert(!strcmp(...)) line in the code below:
       fprintf(stderr, "Checkpoint Promotion:\n%s\n", temp);
@@ -164,6 +165,43 @@ int main(void)
    assert(BDT_destroy() == INITIALIZATION_ERROR);
    assert(BDT_contains("a") == FALSE);
    assert((temp = BDT_toString()) == NULL);
+=======
+  /* Debugging: you may want to add this line before any failing
+     assert(!strcmp(...)) line in the code below:
+     fprintf(stderr, "Checkpoint Promotion:\n%s\n", temp);
+  */
+  assert(BDT_insert("a/y") == SUCCESS);
+  assert((temp = BDT_toString()) != NULL);
+  assert(!strcmp(temp,"a\na/y\n"));
+  free(temp);
+  assert(BDT_insert("a/x") == SUCCESS);
+  assert((temp = BDT_toString()) != NULL);
+  assert(!strcmp(temp,"a\na/y\na/x\n"));
+  free(temp);
+  assert(BDT_rm("a/y") == SUCCESS);
+  assert((temp = BDT_toString()) != NULL);
+  
+  fprintf(stderr, "Checkpoint Promotion:\n%s\n", temp);
+
+  assert(!strcmp(temp,"a\na/x\n"));
+  free(temp);
+  assert(BDT_insert("a/y2") == SUCCESS);
+  assert((temp = BDT_toString()) != NULL);
+  assert(!strcmp(temp,"a\na/x\na/y2\n"));
+  free(temp);
+  assert(BDT_rm("a/y2") == SUCCESS);
+  assert((temp = BDT_toString()) != NULL);
+  assert(!strcmp(temp,"a\na/x\n"));
+  free(temp);
+  assert(BDT_insert("a/y3") == SUCCESS);
+  assert((temp = BDT_toString()) != NULL);
+  assert(!strcmp(temp,"a\na/x\na/y3\n"));
+  free(temp);
+  assert(BDT_rm("a/x") == SUCCESS);
+  assert((temp = BDT_toString()) != NULL);
+  assert(!strcmp(temp,"a\na/y3\n"));
+  free(temp);
+>>>>>>> 9dbefd530597515f7e7ee1c40ede221a9f7efe7a
 
    return 0;
 }
