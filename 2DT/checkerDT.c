@@ -83,7 +83,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode)
                Node_getChild(oNNode, j, &oNChild2);
                if (Node_compare(oNChild1, oNChild2) == 0)
                {
-                  fprintf(stderr, "Two children have the same name\n");
+                  fprintf(stderr, "Two nodes have the same absolute name\n");
                   return FALSE;
                }
                else if (Node_compare(oNChild1, oNChild2) < 0)
