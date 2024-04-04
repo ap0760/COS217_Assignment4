@@ -64,6 +64,12 @@ static boolean CheckerDT_treeCheck(Node_T oNNode)
       /* If not, pass that failure back up immediately */
       if (!CheckerDT_Node_isValid(oNNode))
          return FALSE;
+      
+      /* Check that if a node has multiple children, those children are unique */
+      if(Node_getNumChildren(oNNode) > 1)
+      {
+         DynArray_get(DynArray_T oDynArray, size_t uIndex);
+      }
 
       /* Recur on every child of oNNode */
       for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++)
