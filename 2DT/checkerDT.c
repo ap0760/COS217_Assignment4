@@ -77,11 +77,11 @@ static boolean CheckerDT_treeCheck(Node_T oNNode)
          {
             for (j = i + 1; j < numChildren; j++)
             {
-               Node_T *poNChild1;
-               Node_T *poNChild2;
-               Node_getChild(oNNode, i, poNChild1);
-               Node_getChild(oNNode, j, poNChild2);
-               if (Node_compare(*poNChild1, *poNChild2) == 0)
+               Node_T oNChild1 = NULL;
+               Node_T oNChild2 = NULL;
+               Node_getChild(oNNode, i, &oNChild1);
+               Node_getChild(oNNode, j, &oNChild2);
+               if (Node_compare(oNChild1, oNChild2) == 0)
                {
                   fprintf(stderr, "Two children have the same name\n");
                   return FALSE;
