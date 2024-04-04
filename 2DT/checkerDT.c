@@ -64,20 +64,31 @@ static boolean CheckerDT_treeCheck(Node_T oNNode)
       /* If not, pass that failure back up immediately */
       if (!CheckerDT_Node_isValid(oNNode))
          return FALSE;
-      
+
       /* Check that if a node has multiple children, those children are unique */
-      /*if(Node_getNumChildren(oNNode) > 1)
+      if (Node_getNumChildren(oNNode) > 1)
       {
          size_t numChildren;
          size_t i;
          size_t j;
-         
-         numChildren = Node_getNumChildren(oNNode);
 
-         for (size_t i = 0; i < numChildren; i++;)
+         numChildren = Node_getNumChildren(oNNode);
+         for (size_t i = 0; i < numChildren; i++)
          {
+            for (size_t j = i + 1; j < numChildren; j++)
+            {
+               Node_T *poNChild1;
+               Node_T *poNChild2;
+               Node_getChild(oNNode, i, poNChild1);
+               Node_getChild(oNNode, j, poNChild2);
+               if (Node_compare(*poNChild1, *poNChild2) == 0)
+               {
+                  fprintf(stderr, "Two children have the same name\n");
+                  return FALSE;
+               }
+            }
          }
-      }*/
+      }
 
       /* Recur on every child of oNNode */
       for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++)
@@ -112,7 +123,8 @@ static boolean CheckerDT_bNotInitialized(Node_T oNRoot, size_t ulCount)
       fprintf(stderr, "Not initialized, but root is not NULL\n");
       return FALSE;
    }
-   else return TRUE;
+   else
+      return TRUE;
 }
 
 /* see checkerDT.h for specification */
