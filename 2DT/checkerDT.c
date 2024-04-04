@@ -132,6 +132,22 @@ static boolean CheckerDT_bNotInitialized(Node_T oNRoot, size_t ulCount)
       return TRUE;
 }
 
+static boolean CheckerDT_bIsInitialized(Node_T oNRoot, size_t ulCount)
+{
+   if ((ulCount == 0) && (oNRoot != NULL))
+   {
+      fprintf(stderr, "Has a root, but count is not 0\n");
+      return FALSE;
+   }
+   if ((ulCount != 0) && (oNRoot == NULL))
+   {
+      fprintf(stderr, "Has no root, but count is not 0\n");
+      return FALSE;
+   }
+   else
+      return TRUE;
+}
+
 /* see checkerDT.h for specification */
 boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
                           size_t ulCount)
@@ -141,8 +157,15 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       if the DT is not initialized, its count should be 0 and oNRoot
       should be NULL */
    if (!bIsInitialized)
+   {
       if (CheckerDT_bNotInitialized(oNRoot, ulCount) == FALSE)
          return FALSE;
+   }
+   else
+   {
+      if (CheckerDT_bIsInitialized(oNRoot, ulCount) == FALSE)
+         return FALSE;
+   }
 
    /* Now checks invariants recursively at each node from the root. */
    return CheckerDT_treeCheck(oNRoot);
