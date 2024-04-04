@@ -86,7 +86,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode)
                   fprintf(stderr, "Two children have the same name\n");
                   return FALSE;
                }
-               else if (Node_compare(oNChild1, oNChild2) > 0)
+               else if (Node_compare(oNChild1, oNChild2) < 0)
                {
                   fprintf(stderr, "Nodes are not in lexicographic order\n");
                   return FALSE;
