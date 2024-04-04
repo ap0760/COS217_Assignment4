@@ -87,6 +87,7 @@ static boolean CheckerDT_bNotInitialized(Node_T oNRoot, size_t ulCount)
          fprintf(stderr, "Not initialized, but count is not 0\n");
          return FALSE;
       }
+      
    if(oNRoot != NULL) {
       fprintf(stderr, "Not initialized, but root is not NULL\n");
          return FALSE;
