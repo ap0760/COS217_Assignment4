@@ -107,7 +107,8 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
 {
 
    /* Sample check on a top-level data structure invariant:
-      if the DT is not initialized, its count should be 0. */
+      if the DT is not initialized, its count should be 0 and oNRoot
+      should be NULL */
    if (!bIsInitialized)
       if (CheckerDT_bNotInitialized(oNRoot, ulCount) == FALSE)
          return FALSE;
