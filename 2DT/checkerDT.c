@@ -73,9 +73,9 @@ static boolean CheckerDT_treeCheck(Node_T oNNode)
          size_t j;
 
          numChildren = Node_getNumChildren(oNNode);
-         for (size_t i = 0; i < numChildren; i++)
+         for (i = 0; i < numChildren; i++)
          {
-            for (size_t j = i + 1; j < numChildren; j++)
+            for (j = i + 1; j < numChildren; j++)
             {
                Node_T *poNChild1;
                Node_T *poNChild2;
