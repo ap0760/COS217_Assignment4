@@ -161,6 +161,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       if (CheckerDT_bNotInitialized(oNRoot, ulCount) == FALSE)
          return FALSE;
    }
+   // this didn't find any bugs but it's still true and probably good practice 
    else
    {
       if (CheckerDT_bIsInitialized(oNRoot, ulCount) == FALSE)
