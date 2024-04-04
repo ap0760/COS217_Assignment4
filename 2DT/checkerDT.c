@@ -66,10 +66,18 @@ static boolean CheckerDT_treeCheck(Node_T oNNode)
          return FALSE;
       
       /* Check that if a node has multiple children, those children are unique */
-      if(Node_getNumChildren(oNNode) > 1)
+      /*if(Node_getNumChildren(oNNode) > 1)
       {
-         DynArray_get(DynArray_T oDynArray, size_t uIndex);
-      }
+         size_t numChildren;
+         size_t i;
+         size_t j;
+         
+         numChildren = Node_getNumChildren(oNNode);
+
+         for (size_t i = 0; i < numChildren; i++;)
+         {
+         }
+      }*/
 
       /* Recur on every child of oNNode */
       for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++)
@@ -94,6 +102,14 @@ static boolean CheckerDT_treeCheck(Node_T oNNode)
 
 static boolean CheckerDT_bNotInitialized(Node_T oNRoot, size_t ulCount)
 {
+<<<<<<< HEAD
+   if(ulCount != 0) {
+         fprintf(stderr, "Not initialized, but count is not 0\n");
+         return FALSE;
+      }
+      
+   if(oNRoot != NULL) {
+=======
    if (ulCount != 0)
    {
       fprintf(stderr, "Not initialized, but count is not 0\n");
@@ -101,6 +117,7 @@ static boolean CheckerDT_bNotInitialized(Node_T oNRoot, size_t ulCount)
    }
    if (oNRoot != NULL)
    {
+>>>>>>> 5cc706ecd7f9dacd78a8ad5453ac66082f0f6d0d
       fprintf(stderr, "Not initialized, but root is not NULL\n");
       return FALSE;
    }
