@@ -102,6 +102,14 @@ static boolean CheckerDT_treeCheck(Node_T oNNode)
 
 static boolean CheckerDT_bNotInitialized(Node_T oNRoot, size_t ulCount)
 {
+<<<<<<< HEAD
+   if(ulCount != 0) {
+         fprintf(stderr, "Not initialized, but count is not 0\n");
+         return FALSE;
+      }
+      
+   if(oNRoot != NULL) {
+=======
    if (ulCount != 0)
    {
       fprintf(stderr, "Not initialized, but count is not 0\n");
@@ -109,6 +117,7 @@ static boolean CheckerDT_bNotInitialized(Node_T oNRoot, size_t ulCount)
    }
    if (oNRoot != NULL)
    {
+>>>>>>> 5cc706ecd7f9dacd78a8ad5453ac66082f0f6d0d
       fprintf(stderr, "Not initialized, but root is not NULL\n");
       return FALSE;
    }
