@@ -18,8 +18,9 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
    Node_T oNParent;
    Path_T oPNPath;
    Path_T oPPPath;
+
    size_t ulnumChildren;
-   Node_T oNResult = NULL;
+   size_t oNResult;
 
    /* Sample check: a NULL pointer is not a valid node */
    if (oNNode == NULL)
@@ -34,7 +35,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
    oPNPath = Node_getPath(oNNode);
    if (oPNPath == NULL)
    {
-      if ((oNParent != NULL) || (Node_getNumChildren(oNNode) != 0))
+      if ((oNParent != NULL) || (Node_getNumChildren(oNNode) != 0)) /* should this be really parent? */
          return FALSE;
    }
 
@@ -54,10 +55,17 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
    }
 
    ulnumChildren = Node_getNumChildren(oNNode);
-   if (Node_getChild(oNNode, ulnumChildren - 1, &oNResult) == NO_SUCH_PATH)
+   Node_hasChild(oNNode, oPNPath, &oNResult);
+   if (oNResult > ulnumChildren)
    {
+      fprintf(stderr, "BAD\n");
       return FALSE;
    }
+
+   /*  if (Node_getChild(oNNode, ulnumChildren - 1, &oNResult) == NO_SUCH_PATH)
+    {
+       return FALSE;
+    } */
 
    return TRUE;
 }
