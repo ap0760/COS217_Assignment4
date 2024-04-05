@@ -29,7 +29,6 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
    {
       if ((oNParent != NULL) || (Node_getNumChildren(oNNode) != 0))
          return FALSE;
-      
    }
 
    /* Sample check: parent's path must be the longest possible
