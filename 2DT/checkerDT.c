@@ -44,6 +44,40 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
    return TRUE;
 }
 
+/* Check that if a node has multiple children, those children are unique */
+static boolean CheckerDT_childrenUnique(Node_T oNNode)
+{
+   size_t numChildren;
+   size_t i;
+   size_t j;
+
+   if (Node_getNumChildren(oNNode) <= 1)
+      return TRUE;
+
+   numChildren = Node_getNumChildren(oNNode);
+   for (i = 0; i < numChildren; i++)
+   {
+      for (j = i + 1; j < numChildren; j++)
+      {
+         Node_T oNChild1 = NULL;
+         Node_T oNChild2 = NULL;
+         Node_getChild(oNNode, i, &oNChild1);
+         Node_getChild(oNNode, j, &oNChild2);
+         if (Node_compare(oNChild1, oNChild2) == 0)
+         {
+            fprintf(stderr, "Two nodes have the same absolute path name\n");
+            return FALSE;
+         }
+         /*else if (Node_compare(oNChild1, oNChild2) < 0)
+         {
+            fprintf(stderr, "Nodes are not in lexicographic order\n");
+            return FALSE;
+         }*/
+      }
+   }
+   return TRUE;
+}
+
 /*
    Performs a pre-order traversal of the tree rooted at oNNode.
    Returns FALSE if a broken invariant is found and
@@ -66,34 +100,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode)
          return FALSE;
 
       /* Check that if a node has multiple children, those children are unique */
-      if (Node_getNumChildren(oNNode) > 1)
-      {
-         size_t numChildren;
-         size_t i;
-         size_t j;
-
-         numChildren = Node_getNumChildren(oNNode);
-         for (i = 0; i < numChildren; i++)
-         {
-            for (j = i + 1; j < numChildren; j++)
-            {
-               Node_T oNChild1 = NULL;
-               Node_T oNChild2 = NULL;
-               Node_getChild(oNNode, i, &oNChild1);
-               Node_getChild(oNNode, j, &oNChild2);
-               if (Node_compare(oNChild1, oNChild2) == 0)
-               {
-                  fprintf(stderr, "Two nodes have the same absolute path name\n");
-                  return FALSE;
-               }
-               /*else if (Node_compare(oNChild1, oNChild2) < 0)
-               {
-                  fprintf(stderr, "Nodes are not in lexicographic order\n");
-                  return FALSE;
-               }*/
-            }
-         }
-      }
+      if (!CheckerDT_childrenUnique(oNNode))
+         return FALSE;
 
       /* Recur on every child of oNNode */
       for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++)
@@ -144,8 +152,7 @@ static boolean CheckerDT_bIsInitialized(Node_T oNRoot, size_t ulCount)
       fprintf(stderr, "Has no root, but count is not 0\n");
       return FALSE;
    }
-   else
-      return TRUE;
+   return TRUE;
 }
 
 /* see checkerDT.h for specification */
@@ -158,14 +165,14 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       should be NULL */
    if (!bIsInitialized)
    {
-      if (CheckerDT_bNotInitialized(oNRoot, ulCount) == FALSE)
+      if (!CheckerDT_bNotInitialized(oNRoot, ulCount))
          return FALSE;
    }
    /* this didn't find any bugs but it's still true and probably good
    practice */
    else
    {
-      if (CheckerDT_bIsInitialized(oNRoot, ulCount) == FALSE)
+      if (!CheckerDT_bIsInitialized(oNRoot, ulCount))
          return FALSE;
    }
 
