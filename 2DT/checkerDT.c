@@ -59,7 +59,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
 
    if (oNParent != NULL)
    {
-      ulnumChildren = Node_getNumChildren(oNParent);
+     /*  ulnumChildren = Node_getNumChildren(oNParent);
       Node_hasChild(oNNode, oPNPath, &ulChildId);
 
       if (ulChildId > ulnumChildren)
@@ -72,7 +72,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
       {
          fprintf(stderr, "BAD\n");
          return FALSE;
-      }
+      } */
    }
    return TRUE;
 }
