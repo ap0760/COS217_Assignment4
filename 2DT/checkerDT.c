@@ -16,6 +16,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
    Node_T oNParent;
    Path_T oPNPath;
    Path_T oPPPath;
+   size_t ulnumChildren;
+   Node_T *poNResult;
 
    /* Sample check: a NULL pointer is not a valid node */
    /*if (oNNode == NULL)
@@ -48,23 +50,29 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
       }
    }
 
+   ulnumChildren = Node_getNumChildren(oNNode);
+   if (Node_getChild(oNNode, ulnumChildren - 1, poNResult) == NO_SUCH_PATH)
+   {
+      return FALSE;
+   }
+
    return TRUE;
 }
 
 /* Check that if a node has multiple children, those children are unique */
 static boolean CheckerDT_siblingsCorrect(Node_T oNNode)
 {
-   size_t numChildren;
+   size_t ulnumChildren;
    size_t i;
    size_t j;
 
    if (Node_getNumChildren(oNNode) <= 1)
       return TRUE;
 
-   numChildren = Node_getNumChildren(oNNode);
-   for (i = 0; i < numChildren; i++)
+   ulnumChildren = Node_getNumChildren(oNNode);
+   for (i = 0; i < ulnumChildren; i++)
    {
-      for (j = i + 1; j < numChildren; j++)
+      for (j = i + 1; j < ulnumChildren; j++)
       {
          Node_T oNChild1 = NULL;
          Node_T oNChild2 = NULL;
@@ -109,10 +117,6 @@ static boolean CheckerDT_treeCheck(Node_T oNNode)
       /* Check that if a node has multiple children, those children are unique */
       if (!CheckerDT_siblingsCorrect(oNNode))
          return FALSE;
-
-      /* Check that all children are in lexicographic order */
-      /* if (!CheckerDT_childrenInOrder(oNNode))
-         return FALSE; */
 
       /* Recur on every child of oNNode */
       for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++)
