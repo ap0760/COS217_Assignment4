@@ -23,6 +23,12 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
       fprintf(stderr, "A node is a NULL pointer\n");
       return FALSE;
    }
+   if (oPNPath == NULL)
+   {
+      if ((oNParent != NULL) || (Node_getNumChildren(oNNode) != 0))
+         return FALSE;
+      
+   }
 
    /* Sample check: parent's path must be the longest possible
       proper prefix of the node's path */
