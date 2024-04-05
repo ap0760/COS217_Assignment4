@@ -18,8 +18,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
    Node_T oNParent;
    Path_T oPNPath;
    Path_T oPPPath;
-   /*   size_t ulnumChildren;
-     Node_T oNResult = NULL; */
+   size_t ulnumChildren;
+   Node_T oNResult = NULL;
 
    /* Sample check: a NULL pointer is not a valid node */
    if (oNNode == NULL)
@@ -52,13 +52,13 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
          return FALSE;
       }
    }
-   /*
-      ulnumChildren = Node_getNumChildren(oNNode);
-      if (Node_getChild(oNNode, ulnumChildren - 1, &oNResult) == NO_SUCH_PATH)
-      {
-         return FALSE;
-      }
-   */
+
+   ulnumChildren = Node_getNumChildren(oNNode);
+   if (Node_getChild(oNNode, ulnumChildren - 1, &oNResult) == NO_SUCH_PATH)
+   {
+      return FALSE;
+   }
+
    return TRUE;
 }
 
@@ -83,12 +83,15 @@ static boolean CheckerDT_siblingsCorrect(Node_T oNNode)
          Node_getChild(oNNode, i, &oNChild1);
          Node_getChild(oNNode, j, &oNChild2);
 
-         if (Path_comparePath(Node_getPath(oNChild1), Node_getPath(oNChild2)) == 0)
+         if (Path_comparePath(Node_getPath(oNChild1),
+                              Node_getPath(oNChild2)) == 0)
          {
-            fprintf(stderr, "Two nodes have the same absolute path name\n");
+            fprintf(stderr,
+                    "Two nodes have the same absolute path name\n");
             return FALSE;
          }
-         else if (Path_comparePath(Node_getPath(oNChild1), Node_getPath(oNChild2)) > 0)
+         else if (Path_comparePath(Node_getPath(oNChild1),
+                                   Node_getPath(oNChild2)) > 0)
          {
             fprintf(stderr, "Nodes are not in lexicographic order\n");
             return FALSE;
