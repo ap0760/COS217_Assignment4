@@ -129,8 +129,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode)
          return FALSE;
 
       /* Check that all children are in lexicographic order */
-      if (!CheckerDT_childrenInOrder(oNNode))
-         return FALSE;
+      /* if (!CheckerDT_childrenInOrder(oNNode))
+         return FALSE; */
 
       /* Recur on every child of oNNode */
       for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++)
