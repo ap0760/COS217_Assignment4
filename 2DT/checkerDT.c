@@ -78,14 +78,15 @@ static boolean CheckerDT_siblingsCorrect(Node_T oNNode)
          Node_T oNChild2 = NULL;
          Node_getChild(oNNode, i, &oNChild1);
          Node_getChild(oNNode, j, &oNChild2);
-         
+
          if (Path_comparePath(Node_getPath(oNChild1), Node_getPath(oNChild2)) == 0)
          {
             fprintf(stderr, "Two nodes have the same absolute path name\n");
             return FALSE;
          }
          else if (Path_comparePath(Node_getPath(oNChild1), Node_getPath(oNChild2)) > 0)
-         { fprintf(stderr, "Nodes are not in lexicographic order\n");
+         {
+            fprintf(stderr, "Nodes are not in lexicographic order\n");
             return FALSE;
          }
       }
