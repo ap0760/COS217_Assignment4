@@ -52,7 +52,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
 }
 
 /* Check that if a node has multiple children, those children are unique */
-static boolean CheckerDT_childrenUnique(Node_T oNNode)
+static boolean CheckerDT_siblingsCorrect(Node_T oNNode)
 {
    size_t numChildren;
    size_t i;
@@ -85,36 +85,6 @@ static boolean CheckerDT_childrenUnique(Node_T oNNode)
    return TRUE;
 }
 
-/* Check that if a node has multiple children, those children are in
-Lexicographic order */
-static boolean CheckerDT_childrenInOrder(Node_T oNNode)
-{
-   size_t numChildren;
-   size_t i;
-   size_t j;
-
-   if (Node_getNumChildren(oNNode) <= 1)
-      return TRUE;
-
-   numChildren = Node_getNumChildren(oNNode);
-   for (i = 0; i < numChildren; i++)
-   {
-      for (j = i + 1; j < numChildren; j++)
-      {
-         Node_T oNChild1 = NULL;
-         Node_T oNChild2 = NULL;
-         Node_getChild(oNNode, i, &oNChild1);
-         Node_getChild(oNNode, j, &oNChild2);
-         if (Node_compare(oNChild1, oNChild2) < 0)
-         {
-            fprintf(stderr, "Nodes are not in lexicographic order\n");
-            return FALSE;
-         }
-      }
-   }
-   return TRUE;
-}
-
 /*
    Performs a pre-order traversal of the tree rooted at oNNode.
    Returns FALSE if a broken invariant is found and
@@ -137,7 +107,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode)
          return FALSE;
 
       /* Check that if a node has multiple children, those children are unique */
-      if (!CheckerDT_childrenUnique(oNNode))
+      if (!CheckerDT_siblingsCorrect(oNNode))
          return FALSE;
 
       /* Check that all children are in lexicographic order */
