@@ -55,8 +55,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
    {
       return FALSE;
    }
-
-   return TRUE; */
+*/
+   return TRUE;
 }
 
 /* Check that if a node has multiple children, those children are unique */
