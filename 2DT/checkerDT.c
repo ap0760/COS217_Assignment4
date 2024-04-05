@@ -68,11 +68,36 @@ static boolean CheckerDT_childrenUnique(Node_T oNNode)
             fprintf(stderr, "Two nodes have the same absolute path name\n");
             return FALSE;
          }
-         /*else if (Node_compare(oNChild1, oNChild2) < 0)
+      }
+   }
+   return TRUE;
+}
+
+/* Check that if a node has multiple children, those children are in
+Lexicographic order */
+static boolean CheckerDT_childrenInOrder(Node_T oNNode)
+{
+   size_t numChildren;
+   size_t i;
+   size_t j;
+
+   if (Node_getNumChildren(oNNode) <= 1)
+      return TRUE;
+
+   numChildren = Node_getNumChildren(oNNode);
+   for (i = 0; i < numChildren; i++)
+   {
+      for (j = i + 1; j < numChildren; j++)
+      {
+         Node_T oNChild1 = NULL;
+         Node_T oNChild2 = NULL;
+         Node_getChild(oNNode, i, &oNChild1);
+         Node_getChild(oNNode, j, &oNChild2);
+         if (Node_compare(oNChild1, oNChild2) < 0)
          {
             fprintf(stderr, "Nodes are not in lexicographic order\n");
             return FALSE;
-         }*/
+         }
       }
    }
    return TRUE;
@@ -101,6 +126,10 @@ static boolean CheckerDT_treeCheck(Node_T oNNode)
 
       /* Check that if a node has multiple children, those children are unique */
       if (!CheckerDT_childrenUnique(oNNode))
+         return FALSE;
+
+      /* Check that all children are in lexicographic order */
+      if (!CheckerDT_childrenInOrder(oNNode))
          return FALSE;
 
       /* Recur on every child of oNNode */
