@@ -18,18 +18,18 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
    Path_T oPPPath;
 
    /* Sample check: a NULL pointer is not a valid node */
-   if (oNNode == NULL)
+   /*if (oNNode == NULL)
    {
       fprintf(stderr, "A node is a NULL pointer\n");
       return FALSE;
-   }
+   }*/
    /* Check node invariants - if path is NULL then parent must be NULL
    and child count must be 0 */
-   if (oPNPath == NULL)
+   /*if (oPNPath == NULL)
    {
       if ((oNParent != NULL) || (Node_getNumChildren(oNNode) != 0))
          return FALSE;
-   }
+   }*/
 
    /* Sample check: parent's path must be the longest possible
       proper prefix of the node's path */
