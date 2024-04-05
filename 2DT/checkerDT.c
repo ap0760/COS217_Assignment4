@@ -23,6 +23,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
       fprintf(stderr, "A node is a NULL pointer\n");
       return FALSE;
    }
+   /* Check node invariants - if path is NULL then parent must be NULL
+   and child count must be 0 */
    if (oPNPath == NULL)
    {
       if ((oNParent != NULL) || (Node_getNumChildren(oNNode) != 0))
