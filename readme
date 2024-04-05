@@ -132,6 +132,7 @@ the error manifests itself or is "noticed" by the client.
 What are your critiques of the given DT implementations, as
 specified in Step 2.5?
 
-
+no way to get all of a nodes children (to get the whole dynarray),
+can only get them one at a time
 
 ------------------------------------------------------------------------
