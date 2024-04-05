@@ -10,6 +10,8 @@
 #include "dynarray.h"
 #include "path.h"
 
+/*  */
+
 /* see checkerDT.h for specification */
 boolean CheckerDT_Node_isValid(Node_T oNNode)
 {
@@ -26,10 +28,11 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
       return FALSE;
    }
 
-   /* Check node invariants - if path is NULL then parent must be NULL
+   /* Check Node invariants - if path is NULL then parent must be NULL
    and child count must be 0 */
    oNParent = Node_getParent(oNNode);
-   if ((oPNPath = Node_getPath(oNNode)) == NULL)
+   oPNPath = Node_getPath(oNNode);
+   if (oPNPath == NULL)
    {
       if ((oNParent != NULL) || (Node_getNumChildren(oNNode) != 0))
          return FALSE;
@@ -39,7 +42,6 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
       proper prefix of the node's path */
    if (oNParent != NULL)
    {
-      oPNPath = Node_getPath(oNNode);
       oPPPath = Node_getPath(oNParent);
 
       if (Path_getSharedPrefixDepth(oPNPath, oPPPath) !=
@@ -60,7 +62,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
    return TRUE;
 }
 
-/* Check that if a node has multiple children, those children are unique */
+/* Check that if a node has multiple children, those children are unique
+   and are in lexicographic order */
 static boolean CheckerDT_siblingsCorrect(Node_T oNNode)
 {
    size_t ulnumChildren;
@@ -178,15 +181,15 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
 {
 
    /* Sample check on a top-level data structure invariant:
-      if the DT is not initialized, its count should be 0 and oNRoot
+      if the DT is not initialized, its ulCount should be 0 and oNRoot
       should be NULL */
    if (!bIsInitialized)
    {
       if (!CheckerDT_bNotInitialized(oNRoot, ulCount))
          return FALSE;
    }
-   /* this didn't find any bugs but it's still true and probably good
-   practice */
+   /* If DT is initialized, then ulCount cannot be zero and oNRoot can
+      not be NULL */
    else
    {
       if (!CheckerDT_bIsInitialized(oNRoot, ulCount))
