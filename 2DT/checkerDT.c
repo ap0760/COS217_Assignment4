@@ -70,7 +70,8 @@ static boolean CheckerDT_childrenUnique(Node_T oNNode)
          Node_T oNChild2 = NULL;
          Node_getChild(oNNode, i, &oNChild1);
          Node_getChild(oNNode, j, &oNChild2);
-         if (Path_comparePath(Node_getPath(oNChild1), Node_getPath(oNChild2)) == 0)
+         
+         if (Node_compare(oNChild1, oNChild2) == 0)
          {
             fprintf(stderr, "Two nodes have the same absolute path name\n");
             return FALSE;
