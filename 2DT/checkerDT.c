@@ -171,6 +171,9 @@ static size_t CheckerDT_treeCheck(Node_T oNNode)
    return ulNodeCount;
 }
 
+/* Sample check on a top-level data structure invariant:
+      if the DT is not initialized, its ulCount should be 0 and oNRoot
+      should be NULL */
 static boolean CheckerDT_bNotInitialized(Node_T oNRoot, size_t ulCount)
 {
    if (ulCount != 0)
@@ -183,10 +186,12 @@ static boolean CheckerDT_bNotInitialized(Node_T oNRoot, size_t ulCount)
       fprintf(stderr, "Not initialized, but root is not NULL\n");
       return FALSE;
    }
-   else
-      return TRUE;
+
+   return TRUE;
 }
 
+/* If DT is initialized, then ulCount cannot be zero and oNRoot
+   cannot be NULL */
 static boolean CheckerDT_bIsInitialized(Node_T oNRoot, size_t ulCount)
 {
    if ((ulCount == 0) && (oNRoot != NULL))
@@ -208,17 +213,12 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
 {
    size_t iStatus;
 
-   /* Sample check on a top-level data structure invariant:
-      if the DT is not initialized, its ulCount should be 0 and oNRoot
-      should be NULL */
    if (!bIsInitialized)
    {
       if (!CheckerDT_bNotInitialized(oNRoot, ulCount))
          return FALSE;
    }
 
-   /* If DT is initialized, then ulCount cannot be zero and oNRoot can
-      not be NULL */
    if (!CheckerDT_bIsInitialized(oNRoot, ulCount))
       return FALSE;
 
