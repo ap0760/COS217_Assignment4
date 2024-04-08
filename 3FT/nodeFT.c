@@ -23,6 +23,8 @@ struct node {
    void *pcContents;
    /* file length, if it's a file */
    size_t ulLength;
+   /* a boolean to determine if the node represents a file or directory */
+   boolean bisFile;
 };
 
 
