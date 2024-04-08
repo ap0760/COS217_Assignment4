@@ -10,12 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "dynarray.h"
-#include "path.h"
-#include "nodeDT.h"
-#include "checkerDT.h"
-#include "dt.h"
-
+#include "nodeFT.h"
+#include "ft.h"
 
 /*
   A Directory Tree is a representation of a hierarchy of directories,
