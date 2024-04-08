@@ -24,7 +24,8 @@ typedef struct node *Node_T;
                  or oNParent is NULL but oPPath is not of depth 1
   * ALREADY_IN_TREE if oNParent already has a child with this path
 */
-int Node_new(const char *pcPath, Node_T oNParent, Node_T *poNResult);
+int Node_newFile(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLength, Node_T *poNResult);
+int Node_newDir(const char *pcPath, Node_T oNParent, Node_T *poNResult);
 
 /*
   Destroys and frees all memory allocated for the subtree rooted at
