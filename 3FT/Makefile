@@ -4,9 +4,6 @@ clean:
 clobber: clean
 	rm -f dynarray.o path.o ft_client.o nodeFT.o ft.o
 
-dt%: dynarray.o path.o checkerDT.o nodeDT%.o dt%.o dt_client.o
-	$(GCC) -g $^ -o $@
-
 ft: dynarray.o path.o nodeFT.o ft.o ft_client.o
 	gcc217 dynarray.o path.o nodeFT.o ft.o ft_client.o -o ft
 
