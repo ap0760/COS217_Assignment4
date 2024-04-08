@@ -35,7 +35,8 @@ static int Node_addChild(Node_T oNParent, Node_T oNChild,
                          size_t ulIndex) {
    assert(oNParent != NULL);
    assert(oNChild != NULL);
-
+    /* need an function here to check that the node in question
+    is a directory (not a file - can't have children) */
    if(DynArray_addAt(oNParent->oDChildren, ulIndex, oNChild))
       return SUCCESS;
    else
@@ -68,6 +69,11 @@ static int Node_compareString(const Node_T oNFirst,
                  or oNParent is NULL but oPPath is not of depth 1
   * ALREADY_IN_TREE if oNParent already has a child with this path
 */
+
+/* should have two node inserts - one for files and one for directories
+int Node_newFile(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLength, Node_T *poNResult)
+int Node_newDir(const char *pcPath, Node_T oNParent, Node_T *poNResult) */
+
 int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult) {
     // change oPPath to const char *pcPath
    struct node *psNew;
