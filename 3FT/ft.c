@@ -26,7 +26,6 @@ static Node_T oNRoot;
 static size_t ulCount;
 
 
-
 /* --------------------------------------------------------------------
 
   The DT_traversePath and DT_findNode functions modularize the common
@@ -118,7 +117,7 @@ static int DT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
   * MEMORY_ERROR if memory could not be allocated to complete request
  */
 static int DT_findNode(const char *pcPath, Node_T *poNResult) {
-   Path_T oPPath = NULL;
+   Path_T oPPath = NULL; // shouldnt use paths in FT
    Node_T oNFound = NULL;
    int iStatus;
 
@@ -130,7 +129,7 @@ static int DT_findNode(const char *pcPath, Node_T *poNResult) {
       return INITIALIZATION_ERROR;
    }
 
-   iStatus = Path_new(pcPath, &oPPath);
+   iStatus = Path_new(pcPath, &oPPath); // make a node instead
    if(iStatus != SUCCESS) {
       *poNResult = NULL;
       return iStatus;
@@ -162,10 +161,18 @@ static int DT_findNode(const char *pcPath, Node_T *poNResult) {
 }
 /*--------------------------------------------------------------------*/
 
+// int FT_insertDir(const char *pcPath)
+/* int FT_insertFile(const char *pcPath, void *pvContents,
+                  size_t ulLength) */
+/* the nodeFT will take care of setting the unused variables to NULL for
+each filetype. the FT insert functions should create a node of the 
+correct type (file/dir) and then do the same steps as below to create
+ancestor DIRECTORIES if needed and then to insert the node and link
+the node to its parent */
 
 int DT_insert(const char *pcPath) {
    int iStatus;
-   Path_T oPPath = NULL;
+   Path_T oPPath = NULL; // dont use paths in FT
    Node_T oNFirstNew = NULL;
    Node_T oNCurr = NULL;
    size_t ulDepth, ulIndex;
