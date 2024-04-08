@@ -287,8 +287,9 @@ int DT_rm(const char *pcPath) {
    return SUCCESS;
 }
 
-int DT_init(void) {
-   assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
+/* should be the same as DT_init*/
+int FT_init(void) {
+   // assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
 
    if(bIsInitialized)
       return INITIALIZATION_ERROR;
@@ -297,12 +298,13 @@ int DT_init(void) {
    oNRoot = NULL;
    ulCount = 0;
 
-   assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
+   // assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
    return SUCCESS;
 }
 
-int DT_destroy(void) {
-   assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
+/* should be basically the same as DT_destroy*/
+int FT_destroy(void) {
+   // assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
 
    if(!bIsInitialized)
       return INITIALIZATION_ERROR;
@@ -314,7 +316,7 @@ int DT_destroy(void) {
 
    bIsInitialized = FALSE;
 
-   assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
+   // assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
    return SUCCESS;
 }
 
@@ -330,6 +332,10 @@ int DT_destroy(void) {
   inserting each payload to DynArray_T d beginning at index i.
   Returns the next unused index in d after the insertion(s).
 */
+/* for the FT implementation, this either has to go through the whole
+dynarray of file children before going through the whole dynarray of
+directory children, or it has to go through one dynarray twice - once
+to find all files and then once to find all directories */
 static size_t DT_preOrderTraversal(Node_T n, DynArray_T d, size_t i) {
    size_t c;
 
