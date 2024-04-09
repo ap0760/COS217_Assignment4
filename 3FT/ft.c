@@ -1,14 +1,12 @@
-#include <stddef.h>
 #include <assert.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "a4def.h"
+#include "ft.h"
+#include "nodeFT.h"
 #include "path.h"
 #include "dynarray.h"
-#include "nodeFT.h"
-#include "ft.h"
 
 /*
   A File Tree is a representation of a hierarchy of directories

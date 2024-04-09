@@ -3,12 +3,10 @@
 /* Author: Christopher Moretti                                        */
 /*--------------------------------------------------------------------*/
 
-#include <stdlib.h>
 #include <assert.h>
 #include <string.h>
 #include "nodeFT.h"
 #include "dynarray.h"
-#include "path.h"
 
 /* A node in a DT */
 struct node
