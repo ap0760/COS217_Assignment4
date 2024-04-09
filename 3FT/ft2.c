@@ -282,7 +282,6 @@ int FT_insertDir(const char *pcPath)
 boolean FT_containsDir(const char *pcPath)
 {
   int iStatus;
-  boolean bisFile;
   Node_T oNFound = NULL;
 
   assert(pcPath != NULL);
@@ -290,7 +289,7 @@ boolean FT_containsDir(const char *pcPath)
   iStatus = FT_findNode(pcPath, &oNFound);
   if (iStatus == SUCCESS)
   {
-    if (Node_isFile(oNFound))
+    if (!Node_isFile(oNFound))
     {
       return TRUE;
     }
@@ -306,7 +305,7 @@ int FT_rmDir(const char *pcPath)
   assert(pcPath != NULL);
   assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
 
-  iStatus = DT_findNode(pcPath, &oNFound);
+  iStatus = FT_findNode(pcPath, &oNFound);
 
   if (iStatus != SUCCESS)
     return iStatus;
@@ -425,9 +424,7 @@ int FT_insertFile(const char *pcPath, void *pvContents,
   /* now to insert the file */
   Path_T oPPrefix = NULL;
   Node_T oNNewNode = NULL;
-  void *pvContents = NULL;
-  size_t ulLength = 0;
-  boolean bisFile = FALSE;
+  boolean bisFile = TRUE;
 
   /* generate a Path_T for this level */
   iStatus = Path_prefix(oPPath, ulIndex, &oPPrefix);
@@ -440,7 +437,7 @@ int FT_insertFile(const char *pcPath, void *pvContents,
     return iStatus;
   }
 
-  /* insert the new node for this level */
+  /* insert the file */
   iStatus = Node_new(Path_getPathname(oPPrefix), oNCurr, pvContents, ulLength, bisFile, &oNNewNode);
   if (iStatus != SUCCESS)
   {
@@ -459,6 +456,7 @@ int FT_insertFile(const char *pcPath, void *pvContents,
   if (oNFirstNew == NULL)
     oNFirstNew = oNCurr;
   ulIndex++;
+  /* end of file node insertion */
 
   Path_free(oPPath);
   /* update DT state variables to reflect insertion */
@@ -470,91 +468,78 @@ int FT_insertFile(const char *pcPath, void *pvContents,
   return SUCCESS;
 }
 
-boolean FT_containsFile(const char *pcPath);
-
-int FT_rmFile(const char *pcPath);
-
-/*
-  Traverses the FT to find a node with absolute path pcPath. Returns a
-  int SUCCESS status and sets *poNResult to be the node, if found.
-  Otherwise, sets *poNResult to NULL and returns with status:
-  * INITIALIZATION_ERROR if the DT is not in an initialized state
-  * BAD_PATH if pcPath does not represent a well-formatted path
-  * CONFLICTING_PATH if the root's path is not a prefix of pcPath
-  * NO_SUCH_PATH if no node with pcPath exists in the hierarchy
-  * MEMORY_ERROR if memory could not be allocated to complete request
- */
-static int FT_findNode(const char *pcPath, Node_T *poNResult)
+boolean FT_containsFile(const char *pcPath)
 {
-  Path_T oPPath = NULL;
-  Node_T oNFound = NULL;
   int iStatus;
+  Node_T oNFound = NULL;
 
   assert(pcPath != NULL);
-  assert(poNResult != NULL);
 
-  if (!bIsInitialized)
+  iStatus = FT_findNode(pcPath, &oNFound);
+  if (iStatus == SUCCESS)
   {
-    *poNResult = NULL;
-    return INITIALIZATION_ERROR;
+    if (Node_isFile(oNFound))
+    {
+      return TRUE;
+    }
   }
+  return FALSE;
+}
 
-  iStatus = Path_new(pcPath, &oPPath);
+int FT_rmFile(const char *pcPath)
+{
+  int iStatus;
+  Node_T oNFound = NULL;
+
+  assert(pcPath != NULL);
+  assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
+
+  iStatus = FT_findNode(pcPath, &oNFound);
+
   if (iStatus != SUCCESS)
-  {
-    *poNResult = NULL;
     return iStatus;
-  }
 
-  iStatus = DT_traversePath(oPPath, &oNFound);
-  if (iStatus != SUCCESS)
-  {
-    Path_free(oPPath);
-    *poNResult = NULL;
-    return iStatus;
-  }
+  if (!Node_isFile(oNFound))
+    return NOT_A_FILE;
 
-  if (oNFound == NULL)
-  {
-    Path_free(oPPath);
-    *poNResult = NULL;
-    return NO_SUCH_PATH;
-  }
+  ulCount -= Node_free(oNFound);
+  if (ulCount == 0)
+    oNRoot = NULL;
 
-  if (Path_comparePath(Node_getPath(oNFound), oPPath) != 0)
-  {
-    Path_free(oPPath);
-    *poNResult = NULL;
-    return NO_SUCH_PATH;
-  }
-
-  Path_free(oPPath);
-  *poNResult = oNFound;
+  assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
   return SUCCESS;
 }
 
-/*
-  Returns the contents of the file with absolute path pcPath.
-  Returns NULL if unable to complete the request for any reason.
-
-  Note: checking for a non-NULL return is not an appropriate
-  contains check, because the contents of a file may be NULL.
-*/
 void *FT_getFileContents(const char *pcPath)
 {
+  int iStatus;
+  Node_T oNFound = NULL;
+
   assert(pcPath != NULL);
-  /* check if a node with this name exists in the FT -
-  need an FT version of the DT_findNode function */
+
+  iStatus = FT_findNode(pcPath, &oNFound);
+  if (iStatus != SUCCESS)
+    return NULL;
+  /* our implementation of Node_getFileContents will automatically
+  return NULL if the given node is a directory */
+  return Node_getFileContents(oNFound);
 }
 
-/*
-  Replaces current contents of the file with absolute path pcPath with
-  the parameter pvNewContents of size ulNewLength bytes.
-  Returns the old contents if successful. (Note: contents may be NULL.)
-  Returns NULL if unable to complete the request for any reason.
-*/
 void *FT_replaceFileContents(const char *pcPath, void *pvNewContents,
-                             size_t ulNewLength);
+                             size_t ulNewLength)
+{
+  int iStatus;
+  Node_T oNFound = NULL;
+
+  assert(pcPath != NULL);
+
+  iStatus = FT_findNode(pcPath, &oNFound);
+  if (iStatus != SUCCESS)
+    return NULL;
+  /* our implementation of Node_replaceFileContents will automatically
+  return NULL if the given node is a directory */
+  return Node_replaceFileContents(oNFound, pvNewContents, ulNewLength);
+}
 
 /*
   Returns SUCCESS if pcPath exists in the hierarchy,
