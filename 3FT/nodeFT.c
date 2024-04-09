@@ -21,7 +21,7 @@ struct node
    if it's a directory */
    DynArray_T oDChildren;
    /* a pointer to the file contents, if it's a file */
-   void *pcContents;
+   void *pvContents;
    /* file length, if it's a file */
    size_t ulLength;
    /* a boolean to determine if the node represents a file or directory */
@@ -164,7 +164,7 @@ int Node_new(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLen
    and directories have NULL/0 contents, ulLength */
    if (bisFile) /* file initialization */
    {
-      oNNewNode->pcContents = (char *)pvContents;
+      oNNewNode->pvContents = (char *)pvContents;
       oNNewNode->ulLength = ulIndex;
       oNNewNode->bisFile = TRUE;
    }
@@ -323,8 +323,15 @@ boolean Node_isFile(Node_T oNNode)
 void *Node_getFileContents(Node_T oNNode)
 {
    assert(oNNode != NULL);
-   /* if the given node is not a file, pcContents will be NULL */
-   return oNNode->pcContents;
+   /* if the given node is not a file, pvContents will be NULL */
+   return oNNode->pvContents;
+}
+
+size_t Node_getFileSize(Node_T oNNode)
+{
+   assert(oNNode != NULL);
+   /* if the given node is not a file, u will be NULL */
+   return oNNode->ulLength;
 }
 
 void *Node_replaceFileContents(Node_T oNNode, void *pvNewContents,
@@ -336,8 +343,8 @@ void *Node_replaceFileContents(Node_T oNNode, void *pvNewContents,
    {
       return NULL;
    }
-   pvOldContents = oNNode->pcContents;
-   oNNode->pcContents = pvNewContents;
+   pvOldContents = oNNode->pvContents;
+   oNNode->pvContents = pvNewContents;
    oNNode->ulLength = ulNewLength;
    return pvOldContents;
 }

@@ -92,6 +92,10 @@ boolean Node_isFile(Node_T oNNode);
 unable to complete the request for any reason */
 void *Node_getFileContents(Node_T oNNode);
 
+/* Return the size of a given file node, or NULL if
+unable to complete the request for any reason */
+size_t Node_getFileSize(Node_T oNNode);
+
 /* Replaces current contents of the file with absolute path pcPath with
   the parameter pvNewContents of size ulNewLength bytes.
   Returns the old contents if successful. (Note: contents may be NULL.)
