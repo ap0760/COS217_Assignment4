@@ -212,7 +212,8 @@ size_t Node_free(Node_T oNNode)
                                  ulIndex);
    }
 
-   /* recursively remove children */
+   /* if it's a directory, recursively remove children */
+   /* put an if statement to check whether or not it's a directory */
    while (DynArray_getLength(oNNode->oDChildren) != 0)
    {
       ulCount += Node_free(DynArray_get(oNNode->oDChildren, 0));
@@ -301,4 +302,34 @@ char *Node_toString(Node_T oNNode)
       return NULL;
    else
       return strcpy(copyPath, Path_getPathname(Node_getPath(oNNode)));
+}
+
+/* new functions for nodeFT */
+
+boolean Node_isFile(Node_T oNNode)
+{
+   assert(oNNode != NULL);
+   return oNNode->bisFile;
+}
+
+void *Node_getFileContents(Node_T oNNode)
+{
+   assert(oNNode != NULL);
+   /* if the given node is not a file, pcContents will be NULL */
+   return oNNode->pcContents;
+}
+
+void *Node_replaceFileContents(Node_T oNNode, void *pvNewContents,
+                               size_t ulNewLength)
+{
+   void *pvOldContents;
+   assert(oNNode != NULL);
+   if (!Node_isFile(oNNode))
+   {
+      return NULL;
+   }
+   pvOldContents = oNNode->pcContents;
+   oNNode->pcContents = pvNewContents;
+   oNNode->ulLength = ulNewLength;
+   return pvOldContents;
 }

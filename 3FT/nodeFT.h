@@ -47,7 +47,7 @@ Path_T Node_getPath(Node_T oNNode);
   child _would_ have if inserted.
 */
 boolean Node_hasChild(const char *pcPath, Node_T oNParent,
-                         size_t *pulChildID);
+                      size_t *pulChildID);
 
 /* Returns the number of children that oNParent has. */
 size_t Node_getNumChildren(Node_T oNParent);
@@ -82,5 +82,21 @@ int Node_compare(Node_T oNFirst, Node_T oNSecond);
   the caller!
 */
 char *Node_toString(Node_T oNNode);
+
+/* new functions for nodeFT */
+/* Check if a given node represents a file or a directory.
+Returns TRUE if pcPath is a file, FALSE if it is a directory. */
+boolean Node_isFile(Node_T oNNode);
+
+/* Return the contents of a given file node, or NULL if
+unable to complete the request for any reason */
+void *Node_getFileContents(Node_T oNNode);
+
+/* Replaces current contents of the file with absolute path pcPath with
+  the parameter pvNewContents of size ulNewLength bytes.
+  Returns the old contents if successful. (Note: contents may be NULL.)
+  Returns NULL if unable to complete the request for any reason. */
+void *Node_replaceFileContents(Node_T oNNodevoid *pvNewContents,
+                               size_t ulNewLength);
 
 #endif
