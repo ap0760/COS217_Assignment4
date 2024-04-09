@@ -159,6 +159,9 @@ int Node_new(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLen
    oNNewNode->oNParent = oNParent;
 
    /* initialize the new node */
+   /* a potential checkerFT would check that invariants
+   are upheld after this step - files don't have dynarrays
+   and directories have NULL/0 contents, ulLength */
    if (bisFile) /* file initialization */
    {
       oNNewNode->pcContents = (char *)pvContents;
