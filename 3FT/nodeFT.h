@@ -100,6 +100,8 @@ void *Node_replaceFileContents(Node_T oNNodevoid, void *pvNewContents,
                                size_t ulNewLength);
 
 
+/* these two functions are basically just path functions in the node
+module. if we end up using path objects in ft then we wont need them */
 /*
   Returns the string version of the component of oPPath at level
   ulLevel. This count is from 0, so with level 0 the root of oPPath

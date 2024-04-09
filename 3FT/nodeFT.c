@@ -342,6 +342,9 @@ void *Node_replaceFileContents(Node_T oNNode, void *pvNewContents,
    return pvOldContents;
 }
 
+/* these two functions are basically just path functions in the node
+module. if we end up using path objects in ft then we wont need them */
+
 const char *Node_getPathComponent(Node_T oNNode, size_t ulLevel)
 {
    assert(oNNode != NULL);
