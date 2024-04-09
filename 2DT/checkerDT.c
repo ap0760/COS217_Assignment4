@@ -162,13 +162,15 @@ static size_t CheckerDT_treeCheck(Node_T oNNode)
 
          /* if recurring down one subtree results in a failed check
             farther down, passes the failure back up immediately */
-         if (!(ulRecCount = CheckerDT_treeCheck(oNChild)))
+         ulRecCount = CheckerDT_treeCheck(oNChild);
+         if (ulRecCount == FALSE)
             return FALSE;
 
          ulNodeCount += ulRecCount;
       }
+      return ulNodeCount;
    }
-   return ulNodeCount;
+   return TRUE;
 }
 
 /* Sample check on a top-level data structure invariant:
@@ -222,8 +224,12 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    if (!CheckerDT_bIsInitialized(oNRoot, ulCount))
       return FALSE;
 
+   /* Now checks invariants recursively at each node from the root. */
    iStatus = CheckerDT_treeCheck(oNRoot);
 
+   /* More elegant way? Corner case? -- office hours */
+   if (iStatus == TRUE)
+      return TRUE;
    if (iStatus == FALSE)
       return FALSE;
 
@@ -239,6 +245,5 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       return FALSE;
    } */
 
-   /* Now checks invariants recursively at each node from the root. */
    return iStatus;
 }
