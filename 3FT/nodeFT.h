@@ -103,24 +103,4 @@ size_t Node_getFileSize(Node_T oNNode);
 void *Node_replaceFileContents(Node_T oNNode, void *pvNewContents,
                                size_t ulNewLength);
 
-
-/* these two functions are basically just path functions in the node
-module. if we end up using path objects in ft then we wont need them */
-/*
-  Returns the string version of the component of oPPath at level
-  ulLevel. This count is from 0, so with level 0 the root of oPPath
-  would be returned.
-  Returns NULL if ulLevel is greater than oPPath's maxium level.
-*/
-const char *Node_getPathComponent(Node_T oNNode, size_t ulLevel);
-/* const char *Path_getComponent(Path_T oPPath, size_t ulLevel); */
-
-/*
-  Returns the number of separate levels (components) in oPPath.
-  For example, the absolute path "someRoot" has depth 1, and
-  "someRoot/aChild/aGrandChild/aGreatGrandChild" has depth 4.
-*/
-size_t Node_getPathDepth(Node_T oNNode);
-/* size_t Path_getDepth(Path_T oPPath) */
-
 #endif

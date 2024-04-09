@@ -348,18 +348,3 @@ void *Node_replaceFileContents(Node_T oNNode, void *pvNewContents,
    oNNode->ulLength = ulNewLength;
    return pvOldContents;
 }
-
-/* these two functions are basically just path functions in the node
-module. if we end up using path objects in ft then we wont need them */
-
-const char *Node_getPathComponent(Node_T oNNode, size_t ulLevel)
-{
-   assert(oNNode != NULL);
-   return Path_getComponent(oNNode->oPPath, ulLevel);
-}
-
-size_t Node_getPathDepth(Node_T oNNode)
-{
-   assert(oNNode != NULL);
-   return Path_getDepth(oNNode->oPPath);
-}
