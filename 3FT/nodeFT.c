@@ -245,7 +245,7 @@ Path_T Node_getPath(Node_T oNNode)
 }
 
 /* updated for FT - pcPath instead of oPPath */
-boolean Node_hasChild(Node_T oNParent, char *pcPath,
+boolean Node_hasChild(Node_T oNParent, const char *pcPath,
                       size_t *pulChildID)
 {
    assert(oNParent != NULL);
@@ -253,7 +253,7 @@ boolean Node_hasChild(Node_T oNParent, char *pcPath,
    assert(pulChildID != NULL);
 
    /* *pulChildID is the index into oNParent->oDChildren */
-   return DynArray_bsearch(oNParent->oDChildren, pcPath, pulChildID,
+   return DynArray_bsearch(oNParent->oDChildren, (char *)pcPath, pulChildID,
                            (int (*)(const void *, const void *))Node_compareString);
 }
 
