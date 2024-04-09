@@ -7,6 +7,7 @@
 #define NODE_INCLUDED
 
 #include <stddef.h>
+#include <stdlib.h>
 #include "a4def.h"
 
 /* A Node_T is a node in a Directory Tree */
@@ -45,7 +46,7 @@ Path_T Node_getPath(Node_T oNNode);
   such a child, stores in *pulChildID the identifier that such a
   child _would_ have if inserted.
 */
-boolean Node_hasChild(const char *pcPath, Node_T oNParent,
+boolean Node_hasChild(Node_T oNParent, const char *pcPath,
                       size_t *pulChildID);
 
 /* Returns the number of children that oNParent has. */
@@ -72,7 +73,6 @@ Node_T Node_getParent(Node_T oNNode);
   "greater than" oNSecond, respectively.
 */
 int Node_compareNode(Node_T oNFirst, Node_T oNSecond);
-int Node_compareString(Node_T oNFirst, char *pcSecond);
 
 /*
   Returns a string representation for oNNode, or NULL if
@@ -113,7 +113,7 @@ module. if we end up using path objects in ft then we wont need them */
   Returns NULL if ulLevel is greater than oPPath's maxium level.
 */
 const char *Node_getPathComponent(Node_T oNNode, size_t ulLevel);
-// const char *Path_getComponent(Path_T oPPath, size_t ulLevel);
+/* const char *Path_getComponent(Path_T oPPath, size_t ulLevel); */
 
 /*
   Returns the number of separate levels (components) in oPPath.
@@ -121,6 +121,6 @@ const char *Node_getPathComponent(Node_T oNNode, size_t ulLevel);
   "someRoot/aChild/aGrandChild/aGreatGrandChild" has depth 4.
 */
 size_t Node_getPathDepth(Node_T oNNode);
-//size_t Path_getDepth(Path_T oPPath);
+/* size_t Path_getDepth(Path_T oPPath) */
 
 #endif
