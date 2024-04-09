@@ -55,7 +55,7 @@ static int Node_addChild(Node_T oNParent, Node_T oNChild,
   Returns <0, 0, or >0 if oNFirst is "less than", "equal to", or
   "greater than" pcSecond, respectively.
 */
-static int Node_compareString(const Node_T oNFirst,
+int Node_compareString(const Node_T oNFirst,
                               const char *pcSecond)
 {
    assert(oNFirst != NULL);
@@ -291,7 +291,7 @@ Node_T Node_getParent(Node_T oNNode)
    return oNNode->oNParent;
 }
 
-int Node_compare(Node_T oNFirst, Node_T oNSecond)
+int Node_compareNode(Node_T oNFirst, Node_T oNSecond)
 {
    assert(oNFirst != NULL);
    assert(oNSecond != NULL);
