@@ -6,6 +6,7 @@
 
 #include "a4def.h"
 #include "path.h"
+#include "dynarray.h"
 #include "nodeFT.h"
 #include "ft.h"
 
@@ -630,4 +631,4 @@ int FT_destroy(void)
   Allocates memory for the returned string,
   which is then owned by client!
 */
-char *FT_toString(void);
+/*char *FT_toString(void);*/

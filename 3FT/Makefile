@@ -59,15 +59,15 @@ clobber: clean
 	rm -f dynarray.o path.o ft_client.o nodeFT.o ft2.o
 
 ft2: dynarray.o path.o nodeFT.o ft2.o ft_client.o
-	gcc217 dynarray.o path.o nodeFT.o ft2.o ft_client.o -o ft2
+	gcc217 -g dynarray.o path.o nodeFT.o ft2.o ft_client.o -o ft2
 
 dynarray.o: dynarray.c dynarray.h
-	gcc217 -c dynarray.c
+	gcc217 -g -c dynarray.c
 path.o: path.c dynarray.h path.h a4def.h
-	gcc217 -c path.c
+	gcc217 -g -c path.c
 ft_client.o: ft_client.c ft.h a4def.h
-	gcc217 -c ft_client.c
+	gcc217 -g -c ft_client.c
 nodeFT.o: nodeFT.c dynarray.h path.h nodeFT.h a4def.h
-	gcc217 -c nodeFT.c
-ft2.o: ft2.c nodeFT.h ft.h a4def.h
-	gcc217 -c ft2.c
+	gcc217 -g -c nodeFT.c
+ft2.o: ft2.c nodeFT.h ft.h dynarray.h path.h a4def.h
+	gcc217 -g -c ft2.c

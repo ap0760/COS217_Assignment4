@@ -146,6 +146,6 @@ int FT_destroy(void);
   Allocates memory for the returned string,
   which is then owned by client!
 */
-char *FT_toString(void);
+/* char *FT_toString(void); */
 
 #endif

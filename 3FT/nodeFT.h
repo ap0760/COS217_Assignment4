@@ -9,6 +9,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include "a4def.h"
+#include "path.h"
 
 /* A Node_T is a node in a Directory Tree */
 typedef struct node *Node_T;
