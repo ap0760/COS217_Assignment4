@@ -222,7 +222,7 @@ size_t Node_free(Node_T oNNode)
 
    if (Node_isFile(oNNode))
       return ulCount;
-   
+
    /* if it's a directory, recursively remove children */
    while (DynArray_getLength(oNNode->oDChildren) != 0)
    {
@@ -253,6 +253,9 @@ boolean Node_hasChild(Node_T oNParent, const char *pcPath,
    assert(oNParent != NULL);
    assert(pcPath != NULL);
    assert(pulChildID != NULL);
+
+   if (Node_isFile(oNParent))
+      return FALSE;
 
    /* *pulChildID is the index into oNParent->oDChildren */
    return DynArray_bsearch(oNParent->oDChildren, (char *)pcPath, pulChildID,
