@@ -47,7 +47,6 @@ boolean FT_containsDir(const char *pcPath);
 */
 int FT_rmDir(const char *pcPath);
 
-
 /*
    Inserts a new file into the FT with absolute path pcPath, with
    file contents pvContents of size ulLength bytes.
