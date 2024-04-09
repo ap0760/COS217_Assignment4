@@ -220,8 +220,10 @@ size_t Node_free(Node_T oNNode)
                                  ulIndex);
    }
 
+   if (Node_isFile(oNNode))
+      return ulCount;
+   
    /* if it's a directory, recursively remove children */
-   /* put an if statement to check whether or not it's a directory */
    while (DynArray_getLength(oNNode->oDChildren) != 0)
    {
       ulCount += Node_free(DynArray_get(oNNode->oDChildren, 0));
