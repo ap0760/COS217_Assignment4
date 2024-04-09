@@ -78,7 +78,7 @@ int Node_compareString(const Node_T oNFirst,
 
 int Node_new(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLength, boolean bisFile, Node_T *poNResult)
 {
-   struct node *oNNewNode;
+   Node_T oNNewNode;
    Path_T oPParentPath = NULL;
    Path_T oPNewPath = NULL;
    size_t ulParentDepth;
