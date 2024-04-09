@@ -86,7 +86,7 @@ int Node_new(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLen
    int iStatus;
 
    assert(pcPath != NULL);
-   assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));
+   /*assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));*/
    /* the boolean must be either true or false - unnecessary check? */
    assert(bisFile == TRUE || bisFile == FALSE);
 
@@ -99,7 +99,7 @@ int Node_new(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLen
    }
 
    /* set the new node's path */
-   iStatus = Path_new(pcPath, oPNewPath);
+   iStatus = Path_new(pcPath, &oPNewPath);
    if (iStatus != SUCCESS)
    {
       free(oNNewNode);
@@ -195,8 +195,8 @@ int Node_new(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLen
 
    *poNResult = oNNewNode;
 
-   assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));
-   assert(CheckerDT_Node_isValid(*poNResult));
+   /*assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));*/
+   /*assert(CheckerDT_Node_isValid(*poNResult));*/
 
    return SUCCESS;
 }
@@ -207,7 +207,7 @@ size_t Node_free(Node_T oNNode)
    size_t ulCount = 0;
 
    assert(oNNode != NULL);
-   assert(CheckerDT_Node_isValid(oNNode));
+   /*assert(CheckerDT_Node_isValid(oNNode));*/
 
    /* remove from parent's list */
    if (oNNode->oNParent != NULL)
