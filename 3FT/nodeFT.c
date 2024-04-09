@@ -215,7 +215,7 @@ size_t Node_free(Node_T oNNode)
       if (DynArray_bsearch(
               oNNode->oNParent->oDChildren,
               oNNode, &ulIndex,
-              (int (*)(const void *, const void *))Node_compare))
+              (int (*)(const void *, const void *))Node_compareNode))
          (void)DynArray_removeAt(oNNode->oNParent->oDChildren,
                                  ulIndex);
    }

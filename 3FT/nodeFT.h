@@ -96,7 +96,7 @@ void *Node_getFileContents(Node_T oNNode);
   the parameter pvNewContents of size ulNewLength bytes.
   Returns the old contents if successful. (Note: contents may be NULL.)
   Returns NULL if unable to complete the request for any reason. */
-void *Node_replaceFileContents(Node_T oNNodevoid *pvNewContents,
+void *Node_replaceFileContents(Node_T oNNodevoid, void *pvNewContents,
                                size_t ulNewLength);
 
 #endif
