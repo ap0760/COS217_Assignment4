@@ -35,11 +35,11 @@
 # checkerDT.o: checkerDT.c dynarray.h checkerDT.h nodeDT.h path.h a4def.h
 # 	$(GCC) -g -c $<
 
-nodeFT.o: nodeFT.c dynarray.h nodeFT.h path.h a4def.h
-	$(GCC) -g -c $<
+# nodeFT.o: nodeFT.c dynarray.h nodeFT.h path.h a4def.h
+# 	$(GCC) -g -c $<
 
-ft2.o: ft2.c dynarray.h nodeFT.h ft2.h path.h a4def.h
-	$(GCC) -g -c $<
+# ft2.o: ft2.c dynarray.h nodeFT.h ft2.h path.h a4def.h
+# 	$(GCC) -g -c $<
 
 #You can't re-build the .o files we provide, and
 #you shouldn't be changing the header files they rely on
