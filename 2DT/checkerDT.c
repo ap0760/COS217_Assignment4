@@ -120,17 +120,14 @@ static boolean CheckerDT_siblingsCorrect(Node_T oNNode)
 /*
    Performs a pre-order traversal of the tree rooted at oNNode.
    Returns FALSE if a broken invariant is found and
-   returns TRUE otherwise.
-
-   You may want to change this function's return type or
-   parameter list to facilitate constructing your checks.
-   If you do, you should update this function comment.
+   returns TRUE otherwise. Updates value stored at *pulNodeCount 
+   each time a valid Node is found.
 */
-static size_t CheckerDT_treeCheck(Node_T oNNode)
+static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *pulNodeCount)
 {
    size_t ulIndex;
-   size_t ulNodeCount = 0;
-   size_t ulRecCount;
+
+   assert (pulNodeCount != NULL);
 
    if (oNNode != NULL)
    {
@@ -145,7 +142,7 @@ static size_t CheckerDT_treeCheck(Node_T oNNode)
          return FALSE;
 
       /* increment amount of Nodes each time before recurs */
-      ulNodeCount++;
+      (*pulNodeCount)++;
 
       /* Recur on every child of oNNode */
       for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++)
@@ -162,13 +159,9 @@ static size_t CheckerDT_treeCheck(Node_T oNNode)
 
          /* if recurring down one subtree results in a failed check
             farther down, passes the failure back up immediately */
-         ulRecCount = CheckerDT_treeCheck(oNChild);
-         if (ulRecCount == FALSE)
+         if (!CheckerDT_treeCheck(oNChild, pulNodeCount))
             return FALSE;
-
-         ulNodeCount += ulRecCount;
       }
-      return ulNodeCount;
    }
    return TRUE;
 }
@@ -213,7 +206,9 @@ static boolean CheckerDT_bIsInitialized(Node_T oNRoot, size_t ulCount)
 boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
                           size_t ulCount)
 {
-   size_t iStatus;
+   boolean iStatus;
+   size_t ulNodeCount = 0;
+
 
    if (!bIsInitialized)
    {
@@ -225,25 +220,17 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       return FALSE;
 
    /* Now checks invariants recursively at each node from the root. */
-   iStatus = CheckerDT_treeCheck(oNRoot);
-
-   /* More elegant way? Corner case? -- office hours */
-   if (iStatus == TRUE)
-      return TRUE;
+   iStatus = CheckerDT_treeCheck(oNRoot, &ulNodeCount);
    if (iStatus == FALSE)
-      return FALSE;
+      return iStatus;
 
-   if (iStatus != ulCount)
+   /* Checks if NodeCount hasn't been updated correctly, and has
+      become out of sync with ulCount */
+   if (ulNodeCount != ulCount)
    {
       fprintf(stderr, "Node Count is not being tracked correctly\n");
       return FALSE;
    }
-
-   /* if (CheckerDT_Node_Count(oNRoot) != ulCount)
-   {
-      fprintf(stderr, "Node Count is not being tracked correctly\n");
-      return FALSE;
-   } */
 
    return iStatus;
 }
