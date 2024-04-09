@@ -84,7 +84,7 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest)
       *poNFurthest = NULL;
       return iStatus;
     }
-    if (Node_hasChild(oNCurr, oPPrefix, &ulChildID))
+    if (Node_hasChild(Path_getPathname(oPPrefix), oNCurr, &ulChildID))
     {
       /* go to that child and continue with next prefix */
       Path_free(oPPrefix);
@@ -122,7 +122,7 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest)
  */
 static int FT_findNode(const char *pcPath, Node_T *poNResult)
 {
-  Path_T oPPath = NULL; // shouldnt use paths in FT
+  Path_T oPPath = NULL; /* shouldnt use paths in FT? */
   Node_T oNFound = NULL;
   int iStatus;
 
@@ -135,7 +135,7 @@ static int FT_findNode(const char *pcPath, Node_T *poNResult)
     return INITIALIZATION_ERROR;
   }
 
-  iStatus = Path_new(pcPath, &oPPath); // make a node instead
+  iStatus = Path_new(pcPath, &oPPath); /* make a node instead? */
   if (iStatus != SUCCESS)
   {
     *poNResult = NULL;
@@ -173,7 +173,7 @@ static int FT_findNode(const char *pcPath, Node_T *poNResult)
 int FT_insertDir(const char *pcPath)
 {
   int iStatus;
-  Path_T oPPath = NULL; // dont use paths in FT?
+  Path_T oPPath = NULL; /* dont use paths in FT? */
   Node_T oNFirstNew = NULL;
   Node_T oNCurr = NULL;
   size_t ulDepth, ulIndex;
@@ -325,7 +325,7 @@ int FT_insertFile(const char *pcPath, void *pvContents,
                   size_t ulLength)
 {
   int iStatus;
-  Path_T oPPath = NULL; // dont use paths in FT?
+  Path_T oPPath = NULL; /* dont use paths in FT? */
   Node_T oNFirstNew = NULL;
   Node_T oNCurr = NULL;
   size_t ulDepth, ulIndex;
@@ -577,23 +577,44 @@ int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize)
   {
     *pbIsFile = FALSE;
   }
+  /* technically iStatus is SUCCESS and we can return iStatus, but
+  I feel like this is clearer */
+  return SUCCESS;
 }
 
-/*
-  Sets the FT data structure to an initialized state.
-  The data structure is initially empty.
-  Returns INITIALIZATION_ERROR if already initialized,
-  and SUCCESS otherwise.
-*/
-int FT_init(void);
+int FT_init(void)
+{
+  assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
 
-/*
-  Removes all contents of the data structure and
-  returns it to an uninitialized state.
-  Returns INITIALIZATION_ERROR if not already initialized,
-  and SUCCESS otherwise.
-*/
-int FT_destroy(void);
+  if (bIsInitialized)
+    return INITIALIZATION_ERROR;
+
+  bIsInitialized = TRUE;
+  oNRoot = NULL;
+  ulCount = 0;
+
+  assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
+  return SUCCESS;
+}
+
+int FT_destroy(void)
+{
+  assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
+
+  if (!bIsInitialized)
+    return INITIALIZATION_ERROR;
+
+  if (oNRoot)
+  {
+    ulCount -= Node_free(oNRoot);
+    oNRoot = NULL;
+  }
+
+  bIsInitialized = FALSE;
+
+  assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount));
+  return SUCCESS;
+}
 
 /*
   Returns a string representation of the
@@ -608,5 +629,3 @@ int FT_destroy(void);
   which is then owned by client!
 */
 char *FT_toString(void);
-
-#endif
