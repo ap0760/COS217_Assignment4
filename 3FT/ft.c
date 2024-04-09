@@ -11,6 +11,7 @@
 #include <stdlib.h>
 
 #include "nodeFT.h"
+#include "path.h"
 #include "ft.h"
 
 /*
@@ -43,7 +44,7 @@ static size_t ulCount;
   * CONFLICTING_PATH if the root's path is not a prefix of oPPath
   * MEMORY_ERROR if memory could not be allocated to complete request
 */
-static int DT_traversePath(char *pcPath, Node_T *poNFurthest) {
+static int DT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
    int iStatus;
    Path_T oPPrefix = NULL;
    Node_T oNCurr;
@@ -52,7 +53,7 @@ static int DT_traversePath(char *pcPath, Node_T *poNFurthest) {
    size_t i;
    size_t ulChildID;
 
-   assert(pcPath != NULL);
+   assert(oPPath != NULL);
    assert(poNFurthest != NULL);
 
    /* root is NULL -> won't find anything */
