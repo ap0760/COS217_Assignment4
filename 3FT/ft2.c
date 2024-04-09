@@ -112,6 +112,7 @@ void *FT_getFileContents(const char *pcPath)
 */
 void *FT_replaceFileContents(const char *pcPath, void *pvNewContents,
                              size_t ulNewLength);
+                             
 
 /*
   Returns SUCCESS if pcPath exists in the hierarchy,

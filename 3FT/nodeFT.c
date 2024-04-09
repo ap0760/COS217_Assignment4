@@ -76,41 +76,37 @@ static int Node_compareString(const Node_T oNFirst,
   * ALREADY_IN_TREE if oNParent already has a child with this path
 */
 
-/* should have two node inserts - one for files and one for directories
-int Node_newFile(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLength, Node_T *poNResult)
-int Node_newDir(const char *pcPath, Node_T oNParent, Node_T *poNResult) */
-
-int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult)
+int Node_new(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLength, boolean bisFile, Node_T *poNResult)
 {
-   // change oPPath to const char *pcPath
-   struct node *psNew;
+   struct node *oNNewNode;
    Path_T oPParentPath = NULL;
    Path_T oPNewPath = NULL;
    size_t ulParentDepth;
    size_t ulIndex;
    int iStatus;
 
-   /* change to pcPath, create new node
-  assert(oPPath != NULL); */
+   assert(pcPath != NULL);
    assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));
+   /* the boolean must be either true or false - unnecessary check? */
+   assert(bisFile == TRUE || bisFile == FALSE);
 
    /* allocate space for a new node */
-   psNew = malloc(sizeof(struct node));
-   if (psNew == NULL)
+   oNNewNode = malloc(sizeof(struct node));
+   if (oNNewNode == NULL)
    {
       *poNResult = NULL;
       return MEMORY_ERROR;
    }
 
    /* set the new node's path */
-   iStatus = Path_dup(oPPath, &oPNewPath);
+   iStatus = Path_new(pcPath, oPNewPath);
    if (iStatus != SUCCESS)
    {
-      free(psNew);
+      free(oNNewNode);
       *poNResult = NULL;
       return iStatus;
    }
-   psNew->oPPath = oPNewPath;
+   oNNewNode->oPPath = oPNewPath;
 
    /* validate and set the new node's parent */
    if (oNParent != NULL)
@@ -119,31 +115,31 @@ int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult)
 
       oPParentPath = oNParent->oPPath;
       ulParentDepth = Path_getDepth(oPParentPath);
-      ulSharedDepth = Path_getSharedPrefixDepth(psNew->oPPath,
+      ulSharedDepth = Path_getSharedPrefixDepth(oNNewNode->oPPath,
                                                 oPParentPath);
       /* parent must be an ancestor of child */
       if (ulSharedDepth < ulParentDepth)
       {
-         Path_free(psNew->oPPath);
-         free(psNew);
+         Path_free(oNNewNode->oPPath);
+         free(oNNewNode);
          *poNResult = NULL;
          return CONFLICTING_PATH;
       }
 
       /* parent must be exactly one level up from child */
-      if (Path_getDepth(psNew->oPPath) != ulParentDepth + 1)
+      if (Path_getDepth(oNNewNode->oPPath) != ulParentDepth + 1)
       {
-         Path_free(psNew->oPPath);
-         free(psNew);
+         Path_free(oNNewNode->oPPath);
+         free(oNNewNode);
          *poNResult = NULL;
          return NO_SUCH_PATH;
       }
 
       /* parent must not already have child with this path */
-      if (Node_hasChild(oNParent, oPPath, &ulIndex))
+      if (Node_hasChild(oNParent, pcPath, &ulIndex))
       {
-         Path_free(psNew->oPPath);
-         free(psNew);
+         Path_free(oNNewNode->oPPath);
+         free(oNNewNode);
          *poNResult = NULL;
          return ALREADY_IN_TREE;
       }
@@ -152,40 +148,49 @@ int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult)
    {
       /* new node must be root */
       /* can only create one "level" at a time */
-      if (Path_getDepth(psNew->oPPath) != 1)
+      if (Path_getDepth(oNNewNode->oPPath) != 1)
       {
-         Path_free(psNew->oPPath);
-         free(psNew);
+         Path_free(oNNewNode->oPPath);
+         free(oNNewNode);
          *poNResult = NULL;
          return NO_SUCH_PATH;
       }
    }
-   psNew->oNParent = oNParent;
+   oNNewNode->oNParent = oNParent;
 
    /* initialize the new node */
-   psNew->oDChildren = DynArray_new(0);
-   if (psNew->oDChildren == NULL)
+   if (bisFile) /* file initialization */
    {
-      Path_free(psNew->oPPath);
-      free(psNew);
-      *poNResult = NULL;
-      return MEMORY_ERROR;
+      oNNewNode->pcContents = (char *)pvContents;
+      oNNewNode->ulLength = ulIndex;
+      oNNewNode->bisFile = TRUE;
+   }
+   else /* directory initialization */
+   {
+      oNNewNode->oDChildren = DynArray_new(0);
+      if (oNNewNode->oDChildren == NULL)
+      {
+         Path_free(oNNewNode->oPPath);
+         free(oNNewNode);
+         *poNResult = NULL;
+         return MEMORY_ERROR;
+      }
    }
 
    /* Link into parent's children list */
    if (oNParent != NULL)
    {
-      iStatus = Node_addChild(oNParent, psNew, ulIndex);
+      iStatus = Node_addChild(oNParent, oNNewNode, ulIndex);
       if (iStatus != SUCCESS)
       {
-         Path_free(psNew->oPPath);
-         free(psNew);
+         Path_free(oNNewNode->oPPath);
+         free(oNNewNode);
          *poNResult = NULL;
          return iStatus;
       }
    }
 
-   *poNResult = psNew;
+   *poNResult = oNNewNode;
 
    assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));
    assert(CheckerDT_Node_isValid(*poNResult));
@@ -236,16 +241,16 @@ Path_T Node_getPath(Node_T oNNode)
    return oNNode->oPPath;
 }
 
-boolean Node_hasChild(Node_T oNParent, Path_T oPPath,
+/* updated for FT - pcPath instead of oPPath */
+boolean Node_hasChild(Node_T oNParent, char *pcPath,
                       size_t *pulChildID)
 {
    assert(oNParent != NULL);
-   assert(oPPath != NULL);
+   assert(pcPath != NULL);
    assert(pulChildID != NULL);
 
    /* *pulChildID is the index into oNParent->oDChildren */
-   return DynArray_bsearch(oNParent->oDChildren,
-                           (char *)Path_getPathname(oPPath), pulChildID,
+   return DynArray_bsearch(oNParent->oDChildren, pcPath, pulChildID,
                            (int (*)(const void *, const void *))Node_compareString);
 }
 
