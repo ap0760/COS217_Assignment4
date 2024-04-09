@@ -41,74 +41,74 @@ static size_t ulCount;
 */
 static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest)
 {
-  int iStatus;
-  Path_T oPPrefix = NULL;
-  Node_T oNCurr;
-  Node_T oNChild = NULL;
-  size_t ulDepth;
-  size_t i;
-  size_t ulChildID;
+   int iStatus;
+   Path_T oPPrefix = NULL;
+   Node_T oNCurr;
+   Node_T oNChild = NULL;
+   size_t ulDepth;
+   size_t i;
+   size_t ulChildID;
 
-  assert(oPPath != NULL);
-  assert(poNFurthest != NULL);
+   assert(oPPath != NULL);
+   assert(poNFurthest != NULL);
 
-  /* root is NULL -> won't find anything */
-  if (oNRoot == NULL)
-  {
-    *poNFurthest = NULL;
-    return SUCCESS;
-  }
+   /* root is NULL -> won't find anything */
+   if (oNRoot == NULL)
+   {
+      *poNFurthest = NULL;
+      return SUCCESS;
+   }
 
-  iStatus = Path_prefix(oPPath, 1, &oPPrefix);
-  if (iStatus != SUCCESS)
-  {
-    *poNFurthest = NULL;
-    return iStatus;
-  }
-
-  if (Path_comparePath(Node_getPath(oNRoot), oPPrefix))
-  {
-    Path_free(oPPrefix);
-    *poNFurthest = NULL;
-    return CONFLICTING_PATH;
-  }
-  Path_free(oPPrefix);
-  oPPrefix = NULL;
-
-  oNCurr = oNRoot;
-  ulDepth = Path_getDepth(oPPath);
-  for (i = 2; i <= ulDepth; i++)
-  {
-    iStatus = Path_prefix(oPPath, i, &oPPrefix);
-    if (iStatus != SUCCESS)
-    {
+   iStatus = Path_prefix(oPPath, 1, &oPPrefix);
+   if (iStatus != SUCCESS)
+   {
       *poNFurthest = NULL;
       return iStatus;
-    }
-    if (Node_hasChild(oNCurr, Path_getPathname(oPPrefix), &ulChildID))
-    {
-      /* go to that child and continue with next prefix */
+   }
+
+   if (Path_comparePath(Node_getPath(oNRoot), oPPrefix))
+   {
       Path_free(oPPrefix);
-      oPPrefix = NULL;
-      iStatus = Node_getChild(oNCurr, ulChildID, &oNChild);
+      *poNFurthest = NULL;
+      return CONFLICTING_PATH;
+   }
+   Path_free(oPPrefix);
+   oPPrefix = NULL;
+
+   oNCurr = oNRoot;
+   ulDepth = Path_getDepth(oPPath);
+   for (i = 2; i <= ulDepth; i++)
+   {
+      iStatus = Path_prefix(oPPath, i, &oPPrefix);
       if (iStatus != SUCCESS)
       {
-        *poNFurthest = NULL;
-        return iStatus;
+         *poNFurthest = NULL;
+         return iStatus;
       }
-      oNCurr = oNChild;
-    }
-    else
-    {
-      /* oNCurr doesn't have child with path oPPrefix:
-         this is as far as we can go */
-      break;
-    }
-  }
+      if (Node_hasChild(oNCurr, Path_getPathname(oPPrefix), &ulChildID))
+      {
+         /* go to that child and continue with next prefix */
+         Path_free(oPPrefix);
+         oPPrefix = NULL;
+         iStatus = Node_getChild(oNCurr, ulChildID, &oNChild);
+         if (iStatus != SUCCESS)
+         {
+            *poNFurthest = NULL;
+            return iStatus;
+         }
+         oNCurr = oNChild;
+      }
+      else
+      {
+         /* oNCurr doesn't have child with path oPPrefix:
+            this is as far as we can go */
+         break;
+      }
+   }
 
-  Path_free(oPPrefix);
-  *poNFurthest = oNCurr;
-  return SUCCESS;
+   Path_free(oPPrefix);
+   *poNFurthest = oNCurr;
+   return SUCCESS;
 }
 
 /*
@@ -123,425 +123,425 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest)
  */
 static int FT_findNode(const char *pcPath, Node_T *poNResult)
 {
-  Path_T oPPath = NULL; /* shouldnt use paths in FT? */
-  Node_T oNFound = NULL;
-  int iStatus;
+   Path_T oPPath = NULL; /* shouldnt use paths in FT? */
+   Node_T oNFound = NULL;
+   int iStatus;
 
-  assert(pcPath != NULL);
-  assert(poNResult != NULL);
+   assert(pcPath != NULL);
+   assert(poNResult != NULL);
 
-  if (!bIsInitialized)
-  {
-    *poNResult = NULL;
-    return INITIALIZATION_ERROR;
-  }
+   if (!bIsInitialized)
+   {
+      *poNResult = NULL;
+      return INITIALIZATION_ERROR;
+   }
 
-  iStatus = Path_new(pcPath, &oPPath); /* make a node instead? */
-  if (iStatus != SUCCESS)
-  {
-    *poNResult = NULL;
-    return iStatus;
-  }
+   iStatus = Path_new(pcPath, &oPPath); /* make a node instead? */
+   if (iStatus != SUCCESS)
+   {
+      *poNResult = NULL;
+      return iStatus;
+   }
 
-  iStatus = FT_traversePath(oPPath, &oNFound);
-  if (iStatus != SUCCESS)
-  {
-    Path_free(oPPath);
-    *poNResult = NULL;
-    return iStatus;
-  }
+   iStatus = FT_traversePath(oPPath, &oNFound);
+   if (iStatus != SUCCESS)
+   {
+      Path_free(oPPath);
+      *poNResult = NULL;
+      return iStatus;
+   }
 
-  if (oNFound == NULL)
-  {
-    Path_free(oPPath);
-    *poNResult = NULL;
-    return NO_SUCH_PATH;
-  }
+   if (oNFound == NULL)
+   {
+      Path_free(oPPath);
+      *poNResult = NULL;
+      return NO_SUCH_PATH;
+   }
 
-  if (Path_comparePath(Node_getPath(oNFound), oPPath) != 0)
-  {
-    Path_free(oPPath);
-    *poNResult = NULL;
-    return NO_SUCH_PATH;
-  }
+   if (Path_comparePath(Node_getPath(oNFound), oPPath) != 0)
+   {
+      Path_free(oPPath);
+      *poNResult = NULL;
+      return NO_SUCH_PATH;
+   }
 
-  Path_free(oPPath);
-  *poNResult = oNFound;
-  return SUCCESS;
+   Path_free(oPPath);
+   *poNResult = oNFound;
+   return SUCCESS;
 }
 /*--------------------------------------------------------------------*/
 
 int FT_insertDir(const char *pcPath)
 {
-  int iStatus;
-  Path_T oPPath = NULL; /* dont use paths in FT? */
-  Node_T oNFirstNew = NULL;
-  Node_T oNCurr = NULL;
-  size_t ulDepth, ulIndex;
-  size_t ulNewNodes = 0;
+   int iStatus;
+   Path_T oPPath = NULL; /* dont use paths in FT? */
+   Node_T oNFirstNew = NULL;
+   Node_T oNCurr = NULL;
+   size_t ulDepth, ulIndex;
+   size_t ulNewNodes = 0;
 
-  assert(pcPath != NULL);
-  /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
+   assert(pcPath != NULL);
+   /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
 
-  /* validate pcPath and generate a Path_T for it */
-  if (!bIsInitialized)
-    return INITIALIZATION_ERROR;
+   /* validate pcPath and generate a Path_T for it */
+   if (!bIsInitialized)
+      return INITIALIZATION_ERROR;
 
-  iStatus = Path_new(pcPath, &oPPath);
-  if (iStatus != SUCCESS)
-    return iStatus;
-
-  /* find the closest ancestor of oPPath already in the tree */
-  iStatus = FT_traversePath(oPPath, &oNCurr);
-  if (iStatus != SUCCESS)
-  {
-    Path_free(oPPath);
-    return iStatus;
-  }
-
-  /* ancestor exists in the FT as a file */
-  if (Node_isFile(oNCurr))
-  {
-    return NOT_A_DIRECTORY;
-  }
-
-  /* no ancestor node found, so if root is not NULL,
-     pcPath isn't underneath root. */
-  if (oNCurr == NULL && oNRoot != NULL)
-  {
-    Path_free(oPPath);
-    return CONFLICTING_PATH;
-  }
-
-  ulDepth = Path_getDepth(oPPath);
-  if (oNCurr == NULL) /* new root! */
-    ulIndex = 1;
-  else
-  {
-    ulIndex = Path_getDepth(Node_getPath(oNCurr)) + 1;
-
-    /* oNCurr is the node we're trying to insert */
-    if (ulIndex == ulDepth + 1 && !Path_comparePath(oPPath,
-                                                    Node_getPath(oNCurr)))
-    {
-      Path_free(oPPath);
-      return ALREADY_IN_TREE;
-    }
-  }
-
-  /* starting at oNCurr, build rest of the path one level at a time */
-  while (ulIndex <= ulDepth)
-  {
-    Path_T oPPrefix = NULL;
-    Node_T oNNewNode = NULL;
-    void *pvContents = NULL;
-    size_t ulLength = 0;
-    boolean bisFile = FALSE;
-
-    /* generate a Path_T for this level */
-    iStatus = Path_prefix(oPPath, ulIndex, &oPPrefix);
-    if (iStatus != SUCCESS)
-    {
-      Path_free(oPPath);
-      if (oNFirstNew != NULL)
-        (void)Node_free(oNFirstNew);
-      /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
+   iStatus = Path_new(pcPath, &oPPath);
+   if (iStatus != SUCCESS)
       return iStatus;
-    }
 
-    /* insert the new node for this level */
-    iStatus = Node_new(Path_getPathname(oPPrefix), oNCurr, pvContents, ulLength, bisFile, &oNNewNode);
-    if (iStatus != SUCCESS)
-    {
+   /* find the closest ancestor of oPPath already in the tree */
+   iStatus = FT_traversePath(oPPath, &oNCurr);
+   if (iStatus != SUCCESS)
+   {
       Path_free(oPPath);
+      return iStatus;
+   }
+
+   /* ancestor exists in the FT as a file */
+   if (oNCurr != NULL && Node_isFile(oNCurr))
+   {
+      return NOT_A_DIRECTORY;
+   }
+
+   /* no ancestor node found, so if root is not NULL,
+      pcPath isn't underneath root. */
+   if (oNCurr == NULL && oNRoot != NULL)
+   {
+      Path_free(oPPath);
+      return CONFLICTING_PATH;
+   }
+
+   ulDepth = Path_getDepth(oPPath);
+   if (oNCurr == NULL) /* new root! */
+      ulIndex = 1;
+   else
+   {
+      ulIndex = Path_getDepth(Node_getPath(oNCurr)) + 1;
+
+      /* oNCurr is the node we're trying to insert */
+      if (ulIndex == ulDepth + 1 && !Path_comparePath(oPPath,
+                                                      Node_getPath(oNCurr)))
+      {
+         Path_free(oPPath);
+         return ALREADY_IN_TREE;
+      }
+   }
+
+   /* starting at oNCurr, build rest of the path one level at a time */
+   while (ulIndex <= ulDepth)
+   {
+      Path_T oPPrefix = NULL;
+      Node_T oNNewNode = NULL;
+      void *pvContents = NULL;
+      size_t ulLength = 0;
+      boolean bisFile = FALSE;
+
+      /* generate a Path_T for this level */
+      iStatus = Path_prefix(oPPath, ulIndex, &oPPrefix);
+      if (iStatus != SUCCESS)
+      {
+         Path_free(oPPath);
+         if (oNFirstNew != NULL)
+            (void)Node_free(oNFirstNew);
+         /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
+         return iStatus;
+      }
+
+      /* insert the new node for this level */
+      iStatus = Node_new(Path_getPathname(oPPrefix), oNCurr, pvContents, ulLength, bisFile, &oNNewNode);
+      if (iStatus != SUCCESS)
+      {
+         Path_free(oPPath);
+         Path_free(oPPrefix);
+         if (oNFirstNew != NULL)
+            (void)Node_free(oNFirstNew);
+         /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
+         return iStatus;
+      }
+
+      /* set up for next level */
       Path_free(oPPrefix);
-      if (oNFirstNew != NULL)
-        (void)Node_free(oNFirstNew);
-      /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
-      return iStatus;
-    }
+      oNCurr = oNNewNode;
+      ulNewNodes++;
+      if (oNFirstNew == NULL)
+         oNFirstNew = oNCurr;
+      ulIndex++;
+   }
 
-    /* set up for next level */
-    Path_free(oPPrefix);
-    oNCurr = oNNewNode;
-    ulNewNodes++;
-    if (oNFirstNew == NULL)
-      oNFirstNew = oNCurr;
-    ulIndex++;
-  }
+   Path_free(oPPath);
+   /* update DT state variables to reflect insertion */
+   if (oNRoot == NULL)
+      oNRoot = oNFirstNew;
+   ulCount += ulNewNodes;
 
-  Path_free(oPPath);
-  /* update DT state variables to reflect insertion */
-  if (oNRoot == NULL)
-    oNRoot = oNFirstNew;
-  ulCount += ulNewNodes;
-
-  /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
-  return SUCCESS;
+   /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
+   return SUCCESS;
 }
 
 boolean FT_containsDir(const char *pcPath)
 {
-  int iStatus;
-  Node_T oNFound = NULL;
+   int iStatus;
+   Node_T oNFound = NULL;
 
-  assert(pcPath != NULL);
+   assert(pcPath != NULL);
 
-  iStatus = FT_findNode(pcPath, &oNFound);
-  if (iStatus == SUCCESS)
-  {
-    if (!Node_isFile(oNFound))
-    {
-      return TRUE;
-    }
-  }
-  return FALSE;
+   iStatus = FT_findNode(pcPath, &oNFound);
+   if (iStatus == SUCCESS)
+   {
+      if (!Node_isFile(oNFound))
+      {
+         return TRUE;
+      }
+   }
+   return FALSE;
 }
 
 int FT_rmDir(const char *pcPath)
 {
-  int iStatus;
-  Node_T oNFound = NULL;
+   int iStatus;
+   Node_T oNFound = NULL;
 
-  assert(pcPath != NULL);
-  /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
+   assert(pcPath != NULL);
+   /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
 
-  iStatus = FT_findNode(pcPath, &oNFound);
+   iStatus = FT_findNode(pcPath, &oNFound);
 
-  if (iStatus != SUCCESS)
-    return iStatus;
+   if (iStatus != SUCCESS)
+      return iStatus;
 
-  if (Node_isFile(oNFound))
-    return NOT_A_DIRECTORY;
+   if (Node_isFile(oNFound))
+      return NOT_A_DIRECTORY;
 
-  ulCount -= Node_free(oNFound);
-  if (ulCount == 0)
-    oNRoot = NULL;
+   ulCount -= Node_free(oNFound);
+   if (ulCount == 0)
+      oNRoot = NULL;
 
-  /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
-  return SUCCESS;
+   /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
+   return SUCCESS;
 }
 
 int FT_insertFile(const char *pcPath, void *pvContents,
                   size_t ulLength)
 {
-  int iStatus;
-  Path_T oPPath = NULL; /* dont use paths in FT? */
-  Node_T oNFirstNew = NULL;
-  Node_T oNCurr = NULL;
-  size_t ulDepth, ulIndex;
-  size_t ulNewNodes = 0;
+   int iStatus;
+   Path_T oPPath = NULL; /* dont use paths in FT? */
+   Node_T oNFirstNew = NULL;
+   Node_T oNCurr = NULL;
+   size_t ulDepth, ulIndex;
+   size_t ulNewNodes = 0;
 
-  assert(pcPath != NULL);
-  /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
+   assert(pcPath != NULL);
+   /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
 
-  /* validate pcPath and generate a Path_T for it */
-  if (!bIsInitialized)
-    return INITIALIZATION_ERROR;
+   /* validate pcPath and generate a Path_T for it */
+   if (!bIsInitialized)
+      return INITIALIZATION_ERROR;
 
-  iStatus = Path_new(pcPath, &oPPath);
-  if (iStatus != SUCCESS)
-    return iStatus;
-
-  /* find the closest ancestor of oPPath already in the tree */
-  iStatus = FT_traversePath(oPPath, &oNCurr);
-  if (iStatus != SUCCESS)
-  {
-    Path_free(oPPath);
-    return iStatus;
-  }
-
-  /* ancestor exists in the FT as a file */
-  if (Node_isFile(oNCurr))
-  {
-    return NOT_A_DIRECTORY;
-  }
-
-  /* no ancestor node found, so if root is not NULL,
-     pcPath isn't underneath root. */
-  if (oNCurr == NULL && oNRoot != NULL)
-  {
-    Path_free(oPPath);
-    return CONFLICTING_PATH;
-  }
-
-  ulDepth = Path_getDepth(oPPath);
-  if (oNCurr == NULL) /* new root! */
-    ulIndex = 1;
-  else
-  {
-    ulIndex = Path_getDepth(Node_getPath(oNCurr)) + 1;
-
-    /* oNCurr is the node we're trying to insert */
-    if (ulIndex == ulDepth + 1 && !Path_comparePath(oPPath,
-                                                    Node_getPath(oNCurr)))
-    {
-      Path_free(oPPath);
-      return ALREADY_IN_TREE;
-    }
-  }
-
-  /* starting at oNCurr, build rest of the path one level at a time */
-  while (ulIndex < ulDepth)
-  {
-    Path_T oPPrefix = NULL;
-    Node_T oNNewNode = NULL;
-    void *pvContents = NULL;
-    size_t ulLength = 0;
-    boolean bisFile = FALSE;
-
-    /* generate a Path_T for this level */
-    iStatus = Path_prefix(oPPath, ulIndex, &oPPrefix);
-    if (iStatus != SUCCESS)
-    {
-      Path_free(oPPath);
-      if (oNFirstNew != NULL)
-        (void)Node_free(oNFirstNew);
-      /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
+   iStatus = Path_new(pcPath, &oPPath);
+   if (iStatus != SUCCESS)
       return iStatus;
-    }
 
-    /* insert the new node for this level */
-    iStatus = Node_new(Path_getPathname(oPPrefix), oNCurr, pvContents, ulLength, bisFile, &oNNewNode);
-    if (iStatus != SUCCESS)
-    {
+   /* find the closest ancestor of oPPath already in the tree */
+   iStatus = FT_traversePath(oPPath, &oNCurr);
+   if (iStatus != SUCCESS)
+   {
       Path_free(oPPath);
+      return iStatus;
+   }
+
+   /* no ancestor node found, so if root is not NULL,
+      pcPath isn't underneath root. */
+   if (oNCurr == NULL && oNRoot != NULL)
+   {
+      Path_free(oPPath);
+      return CONFLICTING_PATH;
+   }
+
+   /* ancestor exists in the FT as a file */
+   if (oNCurr != NULL && Node_isFile(oNCurr))
+   {
+      return NOT_A_DIRECTORY;
+   }
+
+   ulDepth = Path_getDepth(oPPath);
+   if (oNCurr == NULL) /* new root! */
+      ulIndex = 1;
+   else
+   {
+      ulIndex = Path_getDepth(Node_getPath(oNCurr)) + 1;
+
+      /* oNCurr is the node we're trying to insert */
+      if (ulIndex == ulDepth + 1 && !Path_comparePath(oPPath,
+                                                      Node_getPath(oNCurr)))
+      {
+         Path_free(oPPath);
+         return ALREADY_IN_TREE;
+      }
+   }
+
+   /* starting at oNCurr, build rest of the path one level at a time */
+   while (ulIndex < ulDepth)
+   {
+      Path_T oPPrefix = NULL;
+      Node_T oNNewNode = NULL;
+      void *pvContents = NULL;
+      size_t ulLength = 0;
+      boolean bisFile = FALSE;
+
+      /* generate a Path_T for this level */
+      iStatus = Path_prefix(oPPath, ulIndex, &oPPrefix);
+      if (iStatus != SUCCESS)
+      {
+         Path_free(oPPath);
+         if (oNFirstNew != NULL)
+            (void)Node_free(oNFirstNew);
+         /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
+         return iStatus;
+      }
+
+      /* insert the new node for this level */
+      iStatus = Node_new(Path_getPathname(oPPrefix), oNCurr, pvContents, ulLength, bisFile, &oNNewNode);
+      if (iStatus != SUCCESS)
+      {
+         Path_free(oPPath);
+         Path_free(oPPrefix);
+         if (oNFirstNew != NULL)
+            (void)Node_free(oNFirstNew);
+         /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
+         return iStatus;
+      }
+
+      /* set up for next level */
       Path_free(oPPrefix);
-      if (oNFirstNew != NULL)
-        (void)Node_free(oNFirstNew);
-      /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
-      return iStatus;
-    }
+      oNCurr = oNNewNode;
+      ulNewNodes++;
+      if (oNFirstNew == NULL)
+         oNFirstNew = oNCurr;
+      ulIndex++;
+   }
 
-    /* set up for next level */
-    Path_free(oPPrefix);
-    oNCurr = oNNewNode;
-    ulNewNodes++;
-    if (oNFirstNew == NULL)
-      oNFirstNew = oNCurr;
-    ulIndex++;
-  }
+   /* now to insert the file */
+   if (ulIndex == ulDepth)
+   {
+      Path_T oPPrefix = NULL;
+      Node_T oNNewNode = NULL;
+      boolean bisFile = TRUE;
 
-  /* now to insert the file */
-  if (ulIndex == ulDepth)
-  {
-    Path_T oPPrefix = NULL;
-    Node_T oNNewNode = NULL;
-    boolean bisFile = TRUE;
+      /* generate a Path_T for this level */
+      iStatus = Path_prefix(oPPath, ulIndex, &oPPrefix);
+      if (iStatus != SUCCESS)
+      {
+         Path_free(oPPath);
+         if (oNFirstNew != NULL)
+            (void)Node_free(oNFirstNew);
+         /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
+         return iStatus;
+      }
 
-    /* generate a Path_T for this level */
-    iStatus = Path_prefix(oPPath, ulIndex, &oPPrefix);
-    if (iStatus != SUCCESS)
-    {
-      Path_free(oPPath);
-      if (oNFirstNew != NULL)
-        (void)Node_free(oNFirstNew);
-      /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
-      return iStatus;
-    }
+      /* insert the file */
+      iStatus = Node_new(Path_getPathname(oPPrefix), oNCurr, pvContents, ulLength, bisFile, &oNNewNode);
+      if (iStatus != SUCCESS)
+      {
+         Path_free(oPPath);
+         Path_free(oPPrefix);
+         if (oNFirstNew != NULL)
+            (void)Node_free(oNFirstNew);
+         /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
+         return iStatus;
+      }
 
-    /* insert the file */
-    iStatus = Node_new(Path_getPathname(oPPrefix), oNCurr, pvContents, ulLength, bisFile, &oNNewNode);
-    if (iStatus != SUCCESS)
-    {
-      Path_free(oPPath);
+      /* set up for next level */
       Path_free(oPPrefix);
-      if (oNFirstNew != NULL)
-        (void)Node_free(oNFirstNew);
-      /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
-      return iStatus;
-    }
+      oNCurr = oNNewNode;
+      ulNewNodes++;
+      if (oNFirstNew == NULL)
+         oNFirstNew = oNCurr;
+      ulIndex++;
+   }
 
-    /* set up for next level */
-    Path_free(oPPrefix);
-    oNCurr = oNNewNode;
-    ulNewNodes++;
-    if (oNFirstNew == NULL)
-      oNFirstNew = oNCurr;
-    ulIndex++;
-  }
+   Path_free(oPPath);
+   /* update DT state variables to reflect insertion */
+   if (oNRoot == NULL)
+      oNRoot = oNFirstNew;
+   ulCount += ulNewNodes;
 
-  Path_free(oPPath);
-  /* update DT state variables to reflect insertion */
-  if (oNRoot == NULL)
-    oNRoot = oNFirstNew;
-  ulCount += ulNewNodes;
-
-  /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
-  return SUCCESS;
+   /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
+   return SUCCESS;
 }
 
 boolean FT_containsFile(const char *pcPath)
 {
-  int iStatus;
-  Node_T oNFound = NULL;
+   int iStatus;
+   Node_T oNFound = NULL;
 
-  assert(pcPath != NULL);
+   assert(pcPath != NULL);
 
-  iStatus = FT_findNode(pcPath, &oNFound);
-  if (iStatus == SUCCESS)
-  {
-    if (Node_isFile(oNFound))
-    {
-      return TRUE;
-    }
-  }
-  return FALSE;
+   iStatus = FT_findNode(pcPath, &oNFound);
+   if (iStatus == SUCCESS)
+   {
+      if (Node_isFile(oNFound))
+      {
+         return TRUE;
+      }
+   }
+   return FALSE;
 }
 
 int FT_rmFile(const char *pcPath)
 {
-  int iStatus;
-  Node_T oNFound = NULL;
+   int iStatus;
+   Node_T oNFound = NULL;
 
-  assert(pcPath != NULL);
-  /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
+   assert(pcPath != NULL);
+   /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
 
-  iStatus = FT_findNode(pcPath, &oNFound);
+   iStatus = FT_findNode(pcPath, &oNFound);
 
-  if (iStatus != SUCCESS)
-    return iStatus;
+   if (iStatus != SUCCESS)
+      return iStatus;
 
-  if (!Node_isFile(oNFound))
-    return NOT_A_FILE;
+   if (!Node_isFile(oNFound))
+      return NOT_A_FILE;
 
-  ulCount -= Node_free(oNFound);
-  if (ulCount == 0)
-    oNRoot = NULL;
+   ulCount -= Node_free(oNFound);
+   if (ulCount == 0)
+      oNRoot = NULL;
 
-  /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
-  return SUCCESS;
+   /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
+   return SUCCESS;
 }
 
 void *FT_getFileContents(const char *pcPath)
 {
-  int iStatus;
-  Node_T oNFound = NULL;
+   int iStatus;
+   Node_T oNFound = NULL;
 
-  assert(pcPath != NULL);
+   assert(pcPath != NULL);
 
-  iStatus = FT_findNode(pcPath, &oNFound);
-  if (iStatus != SUCCESS)
-    return NULL;
-  /* our implementation of Node_getFileContents will automatically
-  return NULL if the given node is a directory */
-  return Node_getFileContents(oNFound);
+   iStatus = FT_findNode(pcPath, &oNFound);
+   if (iStatus != SUCCESS)
+      return NULL;
+   /* our implementation of Node_getFileContents will automatically
+   return NULL if the given node is a directory */
+   return Node_getFileContents(oNFound);
 }
 
 void *FT_replaceFileContents(const char *pcPath, void *pvNewContents,
                              size_t ulNewLength)
 {
-  int iStatus;
-  Node_T oNFound = NULL;
+   int iStatus;
+   Node_T oNFound = NULL;
 
-  assert(pcPath != NULL);
+   assert(pcPath != NULL);
 
-  iStatus = FT_findNode(pcPath, &oNFound);
-  if (iStatus != SUCCESS)
-    return NULL;
-  /* our implementation of Node_replaceFileContents will automatically
-  return NULL if the given node is a directory */
-  return Node_replaceFileContents(oNFound, pvNewContents, ulNewLength);
+   iStatus = FT_findNode(pcPath, &oNFound);
+   if (iStatus != SUCCESS)
+      return NULL;
+   /* our implementation of Node_replaceFileContents will automatically
+   return NULL if the given node is a directory */
+   return Node_replaceFileContents(oNFound, pvNewContents, ulNewLength);
 }
 
 /*
@@ -562,61 +562,61 @@ void *FT_replaceFileContents(const char *pcPath, void *pvNewContents,
 */
 int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize)
 {
-  int iStatus;
-  Node_T oNFound = NULL;
+   int iStatus;
+   Node_T oNFound = NULL;
 
-  assert(pcPath != NULL);
+   assert(pcPath != NULL);
 
-  iStatus = FT_findNode(pcPath, &oNFound);
-  if (iStatus != SUCCESS)
-    return iStatus;
+   iStatus = FT_findNode(pcPath, &oNFound);
+   if (iStatus != SUCCESS)
+      return iStatus;
 
-  if (Node_isFile(oNFound))
-  {
-    *pbIsFile = TRUE;
-    *pulSize = Node_getFileSize(oNFound);
-  }
-  else
-  {
-    *pbIsFile = FALSE;
-  }
-  /* technically iStatus is SUCCESS and we can return iStatus, but
-  I feel like this is clearer */
-  return SUCCESS;
+   if (Node_isFile(oNFound))
+   {
+      *pbIsFile = TRUE;
+      *pulSize = Node_getFileSize(oNFound);
+   }
+   else
+   {
+      *pbIsFile = FALSE;
+   }
+   /* technically iStatus is SUCCESS and we can return iStatus, but
+   I feel like this is clearer */
+   return SUCCESS;
 }
 
 int FT_init(void)
 {
-  /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
+   /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
 
-  if (bIsInitialized)
-    return INITIALIZATION_ERROR;
+   if (bIsInitialized)
+      return INITIALIZATION_ERROR;
 
-  bIsInitialized = TRUE;
-  oNRoot = NULL;
-  ulCount = 0;
+   bIsInitialized = TRUE;
+   oNRoot = NULL;
+   ulCount = 0;
 
-  /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
-  return SUCCESS;
+   /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
+   return SUCCESS;
 }
 
 int FT_destroy(void)
 {
-  /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
+   /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
 
-  if (!bIsInitialized)
-    return INITIALIZATION_ERROR;
+   if (!bIsInitialized)
+      return INITIALIZATION_ERROR;
 
-  if (oNRoot)
-  {
-    ulCount -= Node_free(oNRoot);
-    oNRoot = NULL;
-  }
+   if (oNRoot)
+   {
+      ulCount -= Node_free(oNRoot);
+      oNRoot = NULL;
+   }
 
-  bIsInitialized = FALSE;
+   bIsInitialized = FALSE;
 
-  /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
-  return SUCCESS;
+   /* assert(CheckerDT_isValid(bIsInitialized, oNRoot, ulCount)); */
+   return SUCCESS;
 }
 
 /*

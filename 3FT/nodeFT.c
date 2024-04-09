@@ -155,6 +155,14 @@ int Node_new(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLen
          *poNResult = NULL;
          return NO_SUCH_PATH;
       }
+      /* a file cannot be the root */
+      if (bisFile)
+      {
+         Path_free(oNNewNode->oPPath);
+         free(oNNewNode);
+         *poNResult = NULL;
+         return CONFLICTING_PATH;
+      }
    }
    oNNewNode->oNParent = oNParent;
 

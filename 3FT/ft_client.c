@@ -44,7 +44,7 @@ int main(void) {
   assert(FT_containsDir("1root/2child/3gkid") == FALSE);
   assert(FT_containsFile("1root/2child/3gkid/4ggk") == FALSE);
   /*assert((temp = FT_toString()) != NULL);*/
-  assert(!strcmp(temp,""));
+  /*assert(!strcmp(temp,""));*/
   free(temp);
 
   /* A valid path must not:
