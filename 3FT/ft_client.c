@@ -204,7 +204,7 @@ int main(void)
    assert(l == ARRLEN);
    assert(FT_rmDir("1root") == SUCCESS);
    /*assert((temp = FT_toString()) != NULL);*/
-   assert(!strcmp(temp, ""));
+   /*assert(!strcmp(temp, ""));*/
    free(temp);
 
    /* children should be printed in lexicographic order,

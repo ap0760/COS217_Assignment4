@@ -173,6 +173,7 @@ int Node_new(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLen
    }
    else /* directory initialization */
    {
+      oNNewNode->bisFile = FALSE;
       oNNewNode->oDChildren = DynArray_new(0);
       if (oNNewNode->oDChildren == NULL)
       {
