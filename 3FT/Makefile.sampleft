@@ -18,5 +18,5 @@ clobber: clean
 sampleft: sampleft.o ft2_client.o
 	$(CC) sampleft.o ft2_client.o -o sampleft
 
-ft_client.o: ft2_client.c ft.h a4def.h
+ft2_client.o: ft2_client.c ft.h a4def.h
 	$(CC) -c ft2_client.c
