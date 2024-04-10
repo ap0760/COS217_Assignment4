@@ -233,6 +233,7 @@ int FT_insertDir(const char *pcPath)
    {
       Path_T oPPrefix = NULL;
       Node_T oNNewNode = NULL;
+      /* for all directories, contents and filelength are NULL/0 and bisFile is FALSE */
       void *pvContents = NULL;
       size_t ulLength = 0;
       boolean bisFile = FALSE;
