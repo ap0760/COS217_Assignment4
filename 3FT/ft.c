@@ -1,3 +1,8 @@
+/*--------------------------------------------------------------------*/
+/* path.c                                                             */
+/* Author: Yoni and Ariella                                        */
+/*--------------------------------------------------------------------*/
+
 #include <assert.h>
 #include <string.h>
 #include <stdio.h>
@@ -44,8 +49,8 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest)
    Node_T oNCurr;
    Node_T oNChild = NULL;
    size_t ulDepth;
-   size_t i;
-   size_t ulChildID;
+   size_t ulIndex;
+   size_t ulChildID = 0;
 
    assert(oPPath != NULL);
    assert(poNFurthest != NULL);
@@ -75,9 +80,9 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest)
 
    oNCurr = oNRoot;
    ulDepth = Path_getDepth(oPPath);
-   for (i = 2; i <= ulDepth; i++)
+   for (ulIndex = 2; ulIndex <= ulDepth; ulIndex++)
    {
-      iStatus = Path_prefix(oPPath, i, &oPPrefix);
+      iStatus = Path_prefix(oPPath, ulIndex, &oPPrefix);
       if (iStatus != SUCCESS)
       {
          *poNFurthest = NULL;
