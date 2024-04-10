@@ -9,7 +9,7 @@ clobber: clean
 	rm -f dynarray.o path.o ft_client.o nodeFT.o ft.o
 
 ft: dynarray.o path.o nodeFT.o ft.o ft_client.o
-	gcc217 -g dynarray.o path.o nodeFT.o ft.o ft_client.o -o ft
+	gcc217m -g dynarray.o path.o nodeFT.o ft.o ft_client.o -o ft
 
 dynarray.o: dynarray.c dynarray.h
 	gcc217m -g -c dynarray.c
