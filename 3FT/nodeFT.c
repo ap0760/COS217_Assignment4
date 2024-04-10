@@ -39,7 +39,7 @@ static int Node_addChild(Node_T oNParent, Node_T oNChild,
    /* need an function here to check that the node in question
    is a directory (not a file - can't have children)
    if it's a file then pass up the error */
-   if (!oNParent->bisFile)
+   if (oNParent->bisFile)
       return NOT_A_DIRECTORY;
    else if (DynArray_addAt(oNParent->oDChildren, ulIndex, oNChild))
       return SUCCESS;
