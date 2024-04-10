@@ -165,13 +165,10 @@ int Node_new(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLen
    oNNewNode->oNParent = oNParent;
 
    /* initialize the new node */
-   /* a potential checkerFT would check that invariants
-   are upheld after this step - files don't have dynarrays
-   and directories have NULL/0 contents, ulLength */
    if (bisFile) /* file initialization */
    {
       oNNewNode->pvContents = (char *)pvContents;
-      oNNewNode->ulLength = ulIndex;
+      oNNewNode->ulLength = ulLength;
       oNNewNode->bisFile = TRUE;
    }
    else /* directory initialization */
@@ -226,15 +223,15 @@ size_t Node_free(Node_T oNNode)
                                  ulIndex);
    }
 
-   if (Node_isFile(oNNode))
-      return ulCount;
-
    /* if it's a directory, recursively remove children */
-   while (DynArray_getLength(oNNode->oDChildren) != 0)
+   if (!Node_isFile(oNNode))
    {
-      ulCount += Node_free(DynArray_get(oNNode->oDChildren, 0));
+      while (DynArray_getLength(oNNode->oDChildren) != 0)
+      {
+         ulCount += Node_free(DynArray_get(oNNode->oDChildren, 0));
+      }
+      DynArray_free(oNNode->oDChildren);
    }
-   DynArray_free(oNNode->oDChildren);
 
    /* remove path */
    Path_free(oNNode->oPPath);

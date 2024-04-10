@@ -134,7 +134,8 @@ static int FT_findNode(const char *pcPath, Node_T *poNResult)
       return INITIALIZATION_ERROR;
    }
 
-   iStatus = Path_new(pcPath, &oPPath); /* make a node instead? */
+   iStatus = Path_new(pcPath, &oPPath);
+
    if (iStatus != SUCCESS)
    {
       *poNResult = NULL;
