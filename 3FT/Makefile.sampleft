@@ -13,10 +13,10 @@ clean:
 	rm -f sampleft
 
 clobber: clean
-	rm -f ft2_client.o *~
+	rm -f ft_client.o *~
 
-sampleft: sampleft.o ft2_client.o
-	$(CC) sampleft.o ft2_client.o -o sampleft
+sampleft: sampleft.o ft_client.o
+	$(CC) sampleft.o ft_client.o -o sampleft
 
-ft2_client.o: ft2_client.c ft.h a4def.h
-	$(CC) -c ft2_client.c
+ft_client.o: ft_client.c ft.h a4def.h
+	$(CC) -c ft_client.c

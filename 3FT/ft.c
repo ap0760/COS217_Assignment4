@@ -646,31 +646,47 @@ int FT_destroy(void)
 static size_t FT_preOrderTraversal(Node_T oNNode, DynArray_T oDDynArray, size_t ulIndex)
 {
    size_t ulCurr;
+   Node_T oNChild;
+   int iStatus;
+
    assert(oDDynArray != NULL);
 
    if (oNNode != NULL)
    {
+      if (oNNode == oNRoot) /* kind of a bandaid solution but works */
+      {
+         (void)DynArray_set(oDDynArray, ulIndex, oNNode);
+         ulIndex++;
+      }
+
       for (ulCurr = 0; ulCurr < Node_getNumChildren(oNNode); ulCurr++)
       {
-         if (Node_isFile(oNNode))
+         oNChild = NULL;
+         iStatus = 0;
+
+         iStatus = Node_getChild(oNNode, ulCurr, &oNChild);
+         assert(iStatus == SUCCESS);
+
+         if (Node_isFile(oNChild))
          {
-            (void)DynArray_set(oDDynArray, ulIndex, oNNode);
+            (void)DynArray_set(oDDynArray, ulIndex, oNChild);
             ulIndex++;
          }
       }
 
       for (ulCurr = 0; ulCurr < Node_getNumChildren(oNNode); ulCurr++)
       {
-         int iStatus;
-         Node_T oNChild = NULL;
+         oNChild = NULL;
+         iStatus = 0;
 
-         if (!Node_isFile(oNNode))
+         iStatus = Node_getChild(oNNode, ulCurr, &oNChild);
+         assert(iStatus == SUCCESS);
+
+         if (!Node_isFile(oNChild))
          {
-            (void)DynArray_set(oDDynArray, ulIndex, oNNode);
+            (void)DynArray_set(oDDynArray, ulIndex, oNChild);
             ulIndex++;
 
-            iStatus = Node_getChild(oNNode, ulCurr, &oNChild);
-            assert(iStatus == SUCCESS);
             if (!Node_isFile(oNChild))
                ulIndex = FT_preOrderTraversal(oNChild, oDDynArray, ulIndex);
          }
