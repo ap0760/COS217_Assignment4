@@ -695,9 +695,9 @@ static size_t FT_preOrderTraversal(Node_T oNNode, DynArray_T oDDynArray, size_t 
          {
             (void)DynArray_set(oDDynArray, ulIndex, oNChild);
             ulIndex++;
-/*this if seems unnecessary cuz is nested in an identical if statement*/
+            /*this if seems unnecessary cuz is nested in an identical if statement*/
             /*if (!Node_isFile(oNChild))*/
-               ulIndex = FT_preOrderTraversal(oNChild, oDDynArray, ulIndex);
+            ulIndex = FT_preOrderTraversal(oNChild, oDDynArray, ulIndex);
          }
       }
    }
