@@ -8,16 +8,20 @@ clean:
 clobber: clean
 	rm -f dynarray.o path.o ft_client.o nodeFT.o ft.o
 
+# Dependency rules for file targets
 ft: dynarray.o path.o nodeFT.o ft.o ft_client.o
-	gcc217m -g dynarray.o path.o nodeFT.o ft.o ft_client.o -o ft
+	gcc217 -g dynarray.o path.o nodeFT.o ft.o ft_client.o -o ft
+
+#ftm: dynarray.c path.c nodeFT.c ft.c ft_client.c nodeFT.h ft.h dynarray.h path.h a4def.h
+#gcc217m 
 
 dynarray.o: dynarray.c dynarray.h
-	gcc217m -g -c dynarray.c
+	gcc217 -g -c dynarray.c
 path.o: path.c dynarray.h path.h a4def.h
-	gcc217m -g -c path.c
+	gcc217 -g -c path.c
 ft_client.o: ft_client.c ft.h a4def.h
-	gcc217m -g -c ft_client.c
+	gcc217 -g -c ft_client.c
 nodeFT.o: nodeFT.c dynarray.h path.h nodeFT.h a4def.h
-	gcc217m -g -c nodeFT.c
+	gcc217 -g -c nodeFT.c
 ft.o: ft.c nodeFT.h ft.h dynarray.h path.h a4def.h
-	gcc217m -g -c ft.c
+	gcc217 -g -c ft.c
