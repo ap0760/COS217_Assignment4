@@ -11,7 +11,7 @@
 #include "a4def.h"
 #include "path.h"
 
-/* A Node_T is a node in a Directory Tree */
+/* A Node_T is a node in a File Tree */
 typedef struct node *Node_T;
 
 /*
