@@ -12,8 +12,8 @@ clobber: clean
 ft: dynarray.o path.o nodeFT.o ft.o ft_client.o
 	gcc217 -g dynarray.o path.o nodeFT.o ft.o ft_client.o -o ft
 
-#ftm: dynarray.c path.c nodeFT.c ft.c ft_client.c nodeFT.h ft.h dynarray.h path.h a4def.h
-#gcc217m 
+ftm: dynarray.c path.c nodeFT.c ft.c ft_client.c
+	gcc217m dynarray.c path.c nodeFT.c ft.c ft_client.c -o ftm
 
 dynarray.o: dynarray.c dynarray.h
 	gcc217 -g -c dynarray.c
