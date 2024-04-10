@@ -80,7 +80,7 @@ int Node_new(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLen
    Path_T oPParentPath = NULL;
    Path_T oPNewPath = NULL;
    size_t ulParentDepth;
-   size_t ulIndex;
+   size_t ulIndex = 0;
    int iStatus;
 
    assert(pcPath != NULL);
@@ -207,7 +207,7 @@ int Node_new(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLen
 
 size_t Node_free(Node_T oNNode)
 {
-   size_t ulIndex;
+   size_t ulIndex = 0;
    size_t ulCount = 0;
 
    assert(oNNode != NULL);
