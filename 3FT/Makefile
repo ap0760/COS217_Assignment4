@@ -5,6 +5,7 @@
 all: ft
 clean:
 	rm -f ft meminfo*.out
+	rm -f ftm
 clobber: clean
 	rm -f dynarray.o path.o ft_client.o nodeFT.o ft.o
 

@@ -188,7 +188,9 @@ int FT_insertDir(const char *pcPath)
 
    iStatus = Path_new(pcPath, &oPPath);
    if (iStatus != SUCCESS)
+   {
       return iStatus;
+   }
 
    /* find the closest ancestor of oPPath already in the tree */
    iStatus = FT_traversePath(oPPath, &oNCurr);
@@ -201,6 +203,7 @@ int FT_insertDir(const char *pcPath)
    /* ancestor exists in the FT as a file */
    if (oNCurr != NULL && Node_isFile(oNCurr))
    {
+      Path_free(oPPath);
       return NOT_A_DIRECTORY;
    }
 
@@ -362,6 +365,7 @@ int FT_insertFile(const char *pcPath, void *pvContents,
    /* ancestor exists in the FT as a file */
    if (oNCurr != NULL && Node_isFile(oNCurr))
    {
+      Path_free(oPPath);
       return NOT_A_DIRECTORY;
    }
 
