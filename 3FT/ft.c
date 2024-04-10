@@ -664,16 +664,16 @@ static size_t FT_preOrderTraversal(Node_T oNNode, DynArray_T oDDynArray, size_t 
       {
          int iStatus;
          Node_T oNChild = NULL;
+
          if (!Node_isFile(oNNode))
          {
             (void)DynArray_set(oDDynArray, ulIndex, oNNode);
             ulIndex++;
+            iStatus = Node_getChild(oNNode, ulCurr, &oNChild);
+            assert(iStatus == SUCCESS);
+
+            ulIndex = FT_preOrderTraversal(oNChild, oDDynArray, ulIndex);
          }
-
-         iStatus = Node_getChild(oNNode, ulCurr, &oNChild);
-         assert(iStatus == SUCCESS);
-
-         ulIndex = FT_preOrderTraversal(oNChild, oDDynArray, ulIndex);
       }
    }
    return ulIndex;
