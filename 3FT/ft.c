@@ -631,7 +631,6 @@ int FT_destroy(void)
   Allocates memory for the returned string,
   which is then owned by client!
 */
-/*char *FT_toString(void);*/
 
 /* --------------------------------------------------------------------
 
@@ -669,10 +668,11 @@ static size_t FT_preOrderTraversal(Node_T oNNode, DynArray_T oDDynArray, size_t 
          {
             (void)DynArray_set(oDDynArray, ulIndex, oNNode);
             ulIndex++;
+
             iStatus = Node_getChild(oNNode, ulCurr, &oNChild);
             assert(iStatus == SUCCESS);
-
-            ulIndex = FT_preOrderTraversal(oNChild, oDDynArray, ulIndex);
+            if (!Node_isFile(oNChild))
+               ulIndex = FT_preOrderTraversal(oNChild, oDDynArray, ulIndex);
          }
       }
    }
