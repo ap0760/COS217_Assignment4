@@ -102,8 +102,6 @@ path.h:94:13: Function exported but not used outside path: Path_getComponent
   A declaration is exported, but not used outside this module. Declaration can
   use static qualifier. (Use -exportlocal to inhibit warning)
    path.c:316:1: Definition of Path_getComponent
-nodeFT.h:80:5: Function exported but not used outside nodeFT: Node_compare
-   nodeFT.c:291:1: Definition of Node_compare
 
 ------------------------------------------------------------------------
 What warnings does critTer generate on your Part 3 code, and what are
@@ -119,11 +117,11 @@ ft.c: line 530: medium priority:
 Do you want to validate 'pvNewContents' through an assert?
 No - the contents are allowed to be NULL.
 
-nodeFT.c: line 65: medium priority:
+nodeFT.c: line 78: medium priority:
 Do you want to validate 'pvContents' through an assert?
 No - the contents are allowed to be NULL.
 
-nodeFT.c: line 329: medium priority:
+nodeFT.c: line 334: medium priority:
 Do you want to validate 'pvNewContents' through an assert?
 No - the contents are allowed to be NULL.
 
