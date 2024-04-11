@@ -97,7 +97,13 @@ your disagreements with them? Copy the splint warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
-
+The only warnings we got were results of repurposing the given DT code.
+path.h:94:13: Function exported but not used outside path: Path_getComponent
+  A declaration is exported, but not used outside this module. Declaration can
+  use static qualifier. (Use -exportlocal to inhibit warning)
+   path.c:316:1: Definition of Path_getComponent
+nodeFT.h:80:5: Function exported but not used outside nodeFT: Node_compare
+   nodeFT.c:291:1: Definition of Node_compare
 
 ------------------------------------------------------------------------
 What warnings does critTer generate on your Part 3 code, and what are
@@ -105,22 +111,25 @@ your disagreements with them? Copy the critTer warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
-ft.c: line 335: medium priority:
+ft.c: line 329: medium priority:
 Do you want to validate 'pvContents' through an assert?
 No - the contents are allowed to be NULL.
 
-ft.c: line 542: medium priority:
+ft.c: line 530: medium priority:
 Do you want to validate 'pvNewContents' through an assert?
 No - the contents are allowed to be NULL.
 
-nodeFT.c: line 79: medium priority:
+nodeFT.c: line 65: medium priority:
 Do you want to validate 'pvContents' through an assert?
 No - the contents are allowed to be NULL.
 
-nodeFT.c: line 348: medium priority:
+nodeFT.c: line 329: medium priority:
 Do you want to validate 'pvNewContents' through an assert?
 No - the contents are allowed to be NULL.
 
+There were additional warnings about too many lines/functions/etc,
+but we did not include them here because they fell under the exceptions
+listed in the assignment specs.
 ------------------------------------------------------------------------
 For each of the five faulty BDT implementations required by Step
 1.5, identify the function where there is a bug. You do not have to

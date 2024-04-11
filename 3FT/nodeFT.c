@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------*/
-/* nodeDT.c                                                           */
-/* Author: Christopher Moretti                                        */
+/* nodeFT.c                                                           */
+/* Author: Yoni and Ariella                                        */
 /*--------------------------------------------------------------------*/
 
 #include <assert.h>
@@ -36,9 +36,7 @@ static int Node_addChild(Node_T oNParent, Node_T oNChild,
 {
    assert(oNParent != NULL);
    assert(oNChild != NULL);
-   /* need an function here to check that the node in question
-   is a directory (not a file - can't have children)
-   if it's a file then pass up the error */
+
    if (oNParent->bIsFile)
       return NOT_A_DIRECTORY;
    else if (DynArray_addAt(oNParent->oDChildren, ulIndex, oNChild))
@@ -62,18 +60,6 @@ static int Node_compareString(const Node_T oNFirst,
    return Path_compareString(oNFirst->oPPath, pcSecond);
 }
 
-/*
-  Creates a new node with path oPPath and parent oNParent.  Returns an
-  int SUCCESS status and sets *poNResult to be the new node if
-  successful. Otherwise, sets *poNResult to NULL and returns status:
-  * MEMORY_ERROR if memory could not be allocated to complete request
-  * CONFLICTING_PATH if oNParent's path is not an ancestor of oPPath
-  * NO_SUCH_PATH if oPPath is of depth 0
-                 or oNParent's path is not oPPath's direct parent
-                 or oNParent is NULL but oPPath is not of depth 1
-  * ALREADY_IN_TREE if oNParent already has a child with this path
-*/
-
 int Node_new(const char *pcPath, Node_T oNParent, void *pvContents,
              size_t ulLength, boolean bIsFile, Node_T *poNResult)
 {
@@ -85,8 +71,7 @@ int Node_new(const char *pcPath, Node_T oNParent, void *pvContents,
    int iStatus;
 
    assert(pcPath != NULL);
-   /*assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));*/
-   /* the boolean must be either true or false - unnecessary check? */
+   /* the boolean must be either true or false */
    assert(bIsFile == TRUE || bIsFile == FALSE);
    assert(poNResult != NULL);
 
@@ -201,8 +186,6 @@ int Node_new(const char *pcPath, Node_T oNParent, void *pvContents,
 
    *poNResult = oNNewNode;
 
-   /*assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));*/
-
    return SUCCESS;
 }
 
@@ -250,7 +233,6 @@ Path_T Node_getPath(Node_T oNNode)
    return oNNode->oPPath;
 }
 
-/* updated for FT - pcPath instead of oPPath */
 boolean Node_hasChild(Node_T oNParent, const char *pcPath,
                       size_t *pulChildID)
 {
@@ -322,7 +304,6 @@ char *Node_toString(Node_T oNNode)
 }
 
 /* new functions for nodeFT */
-
 boolean Node_isFile(Node_T oNNode)
 {
    assert(oNNode != NULL);
@@ -332,14 +313,14 @@ boolean Node_isFile(Node_T oNNode)
 void *Node_getFileContents(Node_T oNNode)
 {
    assert(oNNode != NULL);
-   /* if the given node is not a file, pvContents will be NULL */
+   /* if the given node is a directory, pvContents will be NULL */
    return oNNode->pvContents;
 }
 
 size_t Node_getFileSize(Node_T oNNode)
 {
    assert(oNNode != NULL);
-   /* if the given node is not a file, ulLength will be NULL */
+   /* if the given node is a directory, ulLength will be 0 */
    return oNNode->ulLength;
 }
 
@@ -348,12 +329,18 @@ void *Node_replaceFileContents(Node_T oNNode, void *pvNewContents,
 {
    void *pvOldContents;
    assert(oNNode != NULL);
+
+   /* prevents us from accidentally giving directories non-null
+   pvContents and ulLength */
    if (!Node_isFile(oNNode))
    {
       return NULL;
    }
+
+   /* not a directory - replace pvContents and ulLength */
    pvOldContents = oNNode->pvContents;
    oNNode->pvContents = pvNewContents;
    oNNode->ulLength = ulNewLength;
+
    return pvOldContents;
 }

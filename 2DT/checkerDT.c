@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------*/
 /* checkerDT.c                                                        */
-/* Author:                                                            */
+/* Author: Yoni and Ariella                                           */
 /*--------------------------------------------------------------------*/
 
 #include <assert.h>
@@ -10,9 +10,8 @@
 #include "dynarray.h"
 #include "path.h"
 
-/*  */
-
-/* see checkerDT.h for specification */
+/* see checkerDT.h for specification. Returns a boolean - TRUE
+if oNNode is a valid node and FALSE otherwise. */
 boolean CheckerDT_Node_isValid(Node_T oNNode)
 {
    Node_T oNParent;
@@ -54,8 +53,9 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
    return TRUE;
 }
 
-/* Check that if a node has multiple children, those children are unique
-   and are in lexicographic order */
+/* Check that if a node oNNode has multiple children, those children
+are unique and are in lexicographic order. Return a boolean - TRUE if 
+this is the case and FALSE otherwise. */
 static boolean CheckerDT_siblingsCorrect(Node_T oNNode)
 {
    size_t ulnumChildren;
@@ -93,29 +93,6 @@ static boolean CheckerDT_siblingsCorrect(Node_T oNNode)
    }
    return TRUE;
 }
-
-/* static size_t CheckerDT_Node_Count(Node_T oNNode)
-{
-   size_t ulIndex;
-   size_t ulNodeCount = 0;
-   size_t ulRecCount;
-   Node_T oNChild;
-
-   if (oNNode != NULL)
-   {
-      ulNodeCount++;
-      for (ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++)
-      {
-         oNChild = NULL;
-
-         Node_getChild(oNNode, ulIndex, &oNChild);
-
-         ulRecCount = CheckerDT_Node_Count(oNChild);
-         ulNodeCount += ulRecCount;
-      }
-   }
-   return ulNodeCount;
-} */
 
 /*
    Performs a pre-order traversal of the tree rooted at oNNode.
