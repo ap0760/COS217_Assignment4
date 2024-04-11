@@ -71,8 +71,6 @@ int Node_new(const char *pcPath, Node_T oNParent, void *pvContents,
    int iStatus;
 
    assert(pcPath != NULL);
-   /* the boolean must be either true or false */
-   assert(bIsFile == TRUE || bIsFile == FALSE);
    assert(poNResult != NULL);
 
    /* allocate space for a new node */
@@ -233,6 +231,8 @@ Path_T Node_getPath(Node_T oNNode)
    return oNNode->oPPath;
 }
 
+/* we attempted to make this simpler by using char *pcPath
+instead of Path_T oPPath */
 boolean Node_hasChild(Node_T oNParent, const char *pcPath,
                       size_t *pulChildID)
 {
@@ -282,7 +282,12 @@ Node_T Node_getParent(Node_T oNNode)
    return oNNode->oNParent;
 }
 
-int Node_compare(Node_T oNFirst, Node_T oNSecond)
+/*
+  Compares oNFirst and oNSecond lexicographically based on their paths.
+  Returns <0, 0, or >0 if onFirst is "less than", "equal to", or
+  "greater than" oNSecond, respectively.
+*/
+static int Node_compare(Node_T oNFirst, Node_T oNSecond)
 {
    assert(oNFirst != NULL);
    assert(oNSecond != NULL);

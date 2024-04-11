@@ -73,13 +73,6 @@ int Node_getChild(Node_T oNParent, size_t ulChildID,
 Node_T Node_getParent(Node_T oNNode);
 
 /*
-  Compares oNFirst and oNSecond lexicographically based on their paths.
-  Returns <0, 0, or >0 if onFirst is "less than", "equal to", or
-  "greater than" oNSecond, respectively.
-*/
-int Node_compare(Node_T oNFirst, Node_T oNSecond);
-
-/*
   Returns a string representation for oNNode, or NULL if
   there is an allocation error.
 
