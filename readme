@@ -73,15 +73,25 @@ Was it fun?
 will help your grader to grade it in the most favorable light? In
 particular, what bugs are in your submission?
 
-
-
 ------------------------------------------------------------------------
 What warnings does splint generate for Part 2's checker, and what are
 your disagreements with them? Copy the splint warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
-
+All of these warnings are a result of the code that was given to us.
+dtGood.c: (in function DT_traversePath)
+dtGood.c:94:42: Variable ulChildID used before definition
+An rvalue is used that may not be initialized to a value on some execution
+path. (Use -usedef to inhibit warning)
+nodeDTGood.c: (in function Node_new)
+nodeDTGood.c:148:48: Variable ulIndex used before definition
+nodeDTGood.c: (in function Node_free)
+nodeDTGood.c:180:35: Variable ulIndex used before definition
+path.h:94:13: Function exported but not used outside path: Path_getComponent
+A declaration is exported, but not used outside this module. Declaration can
+use static qualifier. (Use -exportlocal to inhibit warning)
+path.c:316:1: Definition of Path_getComponent
 
 ------------------------------------------------------------------------
 What warnings does critTer generate on checkerDT.c, and what are your
@@ -89,7 +99,7 @@ disagreements with them? Copy the critTer warnings here, and express
 your disagreement after each warning. If there are no warnings, then
 write "None."
 
-
+None.
 
 ------------------------------------------------------------------------
 What warnings does splint generate on your Part 3 code, and what are

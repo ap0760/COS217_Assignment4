@@ -145,7 +145,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *pulNodeCount)
 
 /* Sample check on a top-level data structure invariant:
       if the DT is not initialized, its ulCount should be 0 and oNRoot
-      should be NULL */
+      should be NULL. Return TRUE if this relationship is upheld,
+      FALSE otherwise. */
 static boolean CheckerDT_bNotInitialized(Node_T oNRoot, size_t ulCount)
 {
    if (ulCount != 0)
@@ -163,7 +164,8 @@ static boolean CheckerDT_bNotInitialized(Node_T oNRoot, size_t ulCount)
 }
 
 /* If DT is initialized, then ulCount cannot be zero and oNRoot
-   cannot be NULL */
+   cannot be NULL. Return TRUE if this relationship is upheld,
+   FALSE otherwise */
 static boolean CheckerDT_bIsInitialized(Node_T oNRoot, size_t ulCount)
 {
    if ((ulCount == 0) && (oNRoot != NULL))
