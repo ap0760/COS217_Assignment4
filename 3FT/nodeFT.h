@@ -15,8 +15,11 @@
 typedef struct node *Node_T;
 
 /*
-  Creates a new node in the Directory Tree, with path oPPath and
-  parent oNParent. Returns an int SUCCESS status and sets *poNResult
+  Creates a new node in the File Tree, with pathname pcPath and
+  parent oNParent. If bIsFile is TRUE, set pvContents and ulLength to
+  the contents and length specified by the caller. If bIsFile is
+  FALSE, pvContents and ulLength will be ignored.
+  Returns an int SUCCESS status and sets *poNResult
   to be the new node if successful. Otherwise, sets *poNResult to NULL
   and returns status:
   * MEMORY_ERROR if memory could not be allocated to complete request
@@ -26,7 +29,8 @@ typedef struct node *Node_T;
                  or oNParent is NULL but oPPath is not of depth 1
   * ALREADY_IN_TREE if oNParent already has a child with this path
 */
-int Node_new(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLength, boolean bisFile, Node_T *poNResult);
+int Node_new(const char *pcPath, Node_T oNParent, void *pvContents,
+             size_t ulLength, boolean bIsFile, Node_T *poNResult);
 
 /*
   Destroys and frees all memory allocated for the subtree rooted at
@@ -39,7 +43,7 @@ size_t Node_free(Node_T oNNode);
 Path_T Node_getPath(Node_T oNNode);
 
 /*
-  Returns TRUE if oNParent has a child with path oPPath. Returns
+  Returns TRUE if oNParent has a child with pathname pcPath. Returns
   FALSE if it does not.
 
   If oNParent has such a child, stores in *pulChildID the child's
@@ -73,7 +77,7 @@ Node_T Node_getParent(Node_T oNNode);
   Returns <0, 0, or >0 if onFirst is "less than", "equal to", or
   "greater than" oNSecond, respectively.
 */
-int Node_compareNode(Node_T oNFirst, Node_T oNSecond);
+int Node_compare(Node_T oNFirst, Node_T oNSecond);
 
 /*
   Returns a string representation for oNNode, or NULL if
@@ -86,20 +90,20 @@ char *Node_toString(Node_T oNNode);
 
 /* new functions for nodeFT */
 /* Check if a given node represents a file or a directory.
-Returns TRUE if pcPath is a file, FALSE if it is a directory. */
+Returns TRUE if oNNode is a file, FALSE if it is a directory. */
 boolean Node_isFile(Node_T oNNode);
 
-/* Return the contents of a given file node, or NULL if
-unable to complete the request for any reason */
+/* Return the contents of a given file node oNNode, or
+NULL if unable to complete the request for any reason */
 void *Node_getFileContents(Node_T oNNode);
 
-/* Return the size of a given file node, or NULL if
-unable to complete the request for any reason */
+/* Return the size of a given file node oNNode, or
+NULL if unable to complete the request for any reason */
 size_t Node_getFileSize(Node_T oNNode);
 
-/* Replaces current contents of the file with absolute path pcPath with
-  the parameter pvNewContents of size ulNewLength bytes.
-  Returns the old contents if successful. (Note: contents may be NULL.)
+/* Replace current contents of the file node oNNode with
+  absolute path pcPath with pvNewContents of size ulNewLength bytes.
+  Return the old contents if successful. (Note: contents may be NULL.)
   Returns NULL if unable to complete the request for any reason. */
 void *Node_replaceFileContents(Node_T oNNode, void *pvNewContents,
                                size_t ulNewLength);

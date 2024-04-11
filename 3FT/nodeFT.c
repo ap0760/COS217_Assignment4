@@ -23,7 +23,7 @@ struct node
    /* file length, if it's a file */
    size_t ulLength;
    /* a boolean to determine if the node represents a file or directory */
-   boolean bisFile;
+   boolean bIsFile;
 };
 
 /*
@@ -39,7 +39,7 @@ static int Node_addChild(Node_T oNParent, Node_T oNChild,
    /* need an function here to check that the node in question
    is a directory (not a file - can't have children)
    if it's a file then pass up the error */
-   if (oNParent->bisFile)
+   if (oNParent->bIsFile)
       return NOT_A_DIRECTORY;
    else if (DynArray_addAt(oNParent->oDChildren, ulIndex, oNChild))
       return SUCCESS;
@@ -74,7 +74,8 @@ static int Node_compareString(const Node_T oNFirst,
   * ALREADY_IN_TREE if oNParent already has a child with this path
 */
 
-int Node_new(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLength, boolean bisFile, Node_T *poNResult)
+int Node_new(const char *pcPath, Node_T oNParent, void *pvContents,
+             size_t ulLength, boolean bIsFile, Node_T *poNResult)
 {
    Node_T oNNewNode;
    Path_T oPParentPath = NULL;
@@ -86,7 +87,8 @@ int Node_new(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLen
    assert(pcPath != NULL);
    /*assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));*/
    /* the boolean must be either true or false - unnecessary check? */
-   assert(bisFile == TRUE || bisFile == FALSE);
+   assert(bIsFile == TRUE || bIsFile == FALSE);
+   assert(poNResult != NULL);
 
    /* allocate space for a new node */
    oNNewNode = malloc(sizeof(struct node));
@@ -154,7 +156,7 @@ int Node_new(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLen
          return NO_SUCH_PATH;
       }
       /* a file cannot be the root */
-      if (bisFile)
+      if (bIsFile)
       {
          Path_free(oNNewNode->oPPath);
          free(oNNewNode);
@@ -165,15 +167,15 @@ int Node_new(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLen
    oNNewNode->oNParent = oNParent;
 
    /* initialize the new node */
-   if (bisFile) /* file initialization */
+   if (bIsFile) /* file initialization */
    {
       oNNewNode->pvContents = (char *)pvContents;
       oNNewNode->ulLength = ulLength;
-      oNNewNode->bisFile = TRUE;
+      oNNewNode->bIsFile = TRUE;
    }
    else /* directory initialization */
    {
-      oNNewNode->bisFile = FALSE;
+      oNNewNode->bIsFile = FALSE;
       oNNewNode->oDChildren = DynArray_new(0);
       if (oNNewNode->oDChildren == NULL)
       {
@@ -200,7 +202,6 @@ int Node_new(const char *pcPath, Node_T oNParent, void *pvContents, size_t ulLen
    *poNResult = oNNewNode;
 
    /*assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));*/
-   /*assert(CheckerDT_Node_isValid(*poNResult));*/
 
    return SUCCESS;
 }
@@ -211,7 +212,6 @@ size_t Node_free(Node_T oNNode)
    size_t ulCount = 0;
 
    assert(oNNode != NULL);
-   /*assert(CheckerDT_Node_isValid(oNNode));*/
 
    /* remove from parent's list */
    if (oNNode->oNParent != NULL)
@@ -219,7 +219,7 @@ size_t Node_free(Node_T oNNode)
       if (DynArray_bsearch(
               oNNode->oNParent->oDChildren,
               oNNode, &ulIndex,
-              (int (*)(const void *, const void *))Node_compareNode))
+              (int (*)(const void *, const void *))Node_compare))
          (void)DynArray_removeAt(oNNode->oNParent->oDChildren,
                                  ulIndex);
    }
@@ -300,7 +300,7 @@ Node_T Node_getParent(Node_T oNNode)
    return oNNode->oNParent;
 }
 
-int Node_compareNode(Node_T oNFirst, Node_T oNSecond)
+int Node_compare(Node_T oNFirst, Node_T oNSecond)
 {
    assert(oNFirst != NULL);
    assert(oNSecond != NULL);
@@ -326,7 +326,7 @@ char *Node_toString(Node_T oNNode)
 boolean Node_isFile(Node_T oNNode)
 {
    assert(oNNode != NULL);
-   return oNNode->bisFile;
+   return oNNode->bIsFile;
 }
 
 void *Node_getFileContents(Node_T oNNode)
@@ -339,7 +339,7 @@ void *Node_getFileContents(Node_T oNNode)
 size_t Node_getFileSize(Node_T oNNode)
 {
    assert(oNNode != NULL);
-   /* if the given node is not a file, u will be NULL */
+   /* if the given node is not a file, ulLength will be NULL */
    return oNNode->ulLength;
 }
 

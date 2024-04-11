@@ -575,6 +575,8 @@ int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize)
    Node_T oNFound = NULL;
 
    assert(pcPath != NULL);
+   assert(pbIsFile != NULL);
+   assert(pulSize != NULL);
 
    iStatus = FT_findNode(pcPath, &oNFound);
    if (iStatus != SUCCESS)

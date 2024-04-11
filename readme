@@ -105,7 +105,21 @@ your disagreements with them? Copy the critTer warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
+ft.c: line 335: medium priority:
+Do you want to validate 'pvContents' through an assert?
+No - the contents are allowed to be NULL.
 
+ft.c: line 542: medium priority:
+Do you want to validate 'pvNewContents' through an assert?
+No - the contents are allowed to be NULL.
+
+nodeFT.c: line 79: medium priority:
+Do you want to validate 'pvContents' through an assert?
+No - the contents are allowed to be NULL.
+
+nodeFT.c: line 348: medium priority:
+Do you want to validate 'pvNewContents' through an assert?
+No - the contents are allowed to be NULL.
 
 ------------------------------------------------------------------------
 For each of the five faulty BDT implementations required by Step
