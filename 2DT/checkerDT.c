@@ -54,7 +54,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode)
 }
 
 /* Check that if a node oNNode has multiple children, those children
-are unique and are in lexicographic order. Return a boolean - TRUE if 
+are unique and are in lexicographic order. Return a boolean - TRUE if
 this is the case and FALSE otherwise. */
 static boolean CheckerDT_siblingsCorrect(Node_T oNNode)
 {
@@ -97,14 +97,14 @@ static boolean CheckerDT_siblingsCorrect(Node_T oNNode)
 /*
    Performs a pre-order traversal of the tree rooted at oNNode.
    Returns FALSE if a broken invariant is found and
-   returns TRUE otherwise. Updates value stored at *pulNodeCount 
+   returns TRUE otherwise. Updates value stored at *pulNodeCount
    each time a valid Node is found.
 */
 static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *pulNodeCount)
 {
    size_t ulIndex;
 
-   assert (pulNodeCount != NULL);
+   assert(pulNodeCount != NULL);
 
    if (oNNode != NULL)
    {
@@ -144,9 +144,9 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *pulNodeCount)
 }
 
 /* Sample check on a top-level data structure invariant:
-      if the DT is not initialized, its ulCount should be 0 and oNRoot
-      should be NULL. Return TRUE if this relationship is upheld,
-      FALSE otherwise. */
+   if the DT is not initialized, its ulCount should be 0 and oNRoot
+   should be NULL. Return TRUE if this relationship is upheld,
+   FALSE otherwise. */
 static boolean CheckerDT_bNotInitialized(Node_T oNRoot, size_t ulCount)
 {
    if (ulCount != 0)
@@ -188,7 +188,6 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    boolean iStatus;
    size_t ulNodeCount = 0;
 
-
    if (!bIsInitialized)
    {
       if (!CheckerDT_bNotInitialized(oNRoot, ulCount))
@@ -207,7 +206,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       become out of sync with ulCount */
    if (ulNodeCount != ulCount)
    {
-      fprintf(stderr, "Node Count is not being tracked correctly\n");
+      fprintf(stderr, "Node Count is not equal to ulCount\n");
       return FALSE;
    }
 
