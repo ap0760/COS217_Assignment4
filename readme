@@ -177,7 +177,45 @@ the error manifests itself or is "noticed" by the client.
 What are your critiques of the given DT implementations, as
 specified in Step 2.5?
 
-no way to get all of a nodes children (to get the whole dynarray),
-can only get them one at a time
+
+
+Questionable naming conventions/parameter order:
+- Dynarray addAt, removeAt, toArray, search
+There is a variable named “u” used as the array index variable. This
+variable should be given a meaningful name, such as uIndex so that the
+code is more readable and easier to understand.
+- DT_preOrderTraversal
+Every single variable in this function has a one letter name instead of
+a meaningful name. This makes it very hard to understand what is being
+passed into each function and which variables are being used to do what
+in the code. Additionally, the parameters of DT_preOrderTraversal are
+in the order of Node_T, DynArray_T, size_t, while these same parameters
+are passed into DynArray_set in the order of DynArray_T, size_t, Node_T.
+This is confusing - parameter order should be consistent throughout the
+module.
+- DT_toString
+“nodes” is a DynArray_T, though it would be better if there was some
+indicator of this in the variable name itself (ex. oDNodes). Then
+later in the code it would be more clear what type of object we are
+working with and what functions can be performed on it.
+- Node_addChild
+Node_addChild takes a parent node, child node, and an index.
+DynArray_addAt takes a dynarray of children, an index, and a child node.
+The dynarray addAt function is called within the Node_addChild function,
+so the two functions should have the same parameter order (both index
+then child or both child then index).
+- Node_new vs Node_hasChild - Path parent result vs parent path childID
+There should be a consistent parameter order. Either the path is always
+first or the parent is always first.
+- Node_new
+The new node is called psNew. This is not a good name because the new node
+is an object, which should be differentiated from pointers to structs. A
+better name would be oNNewNode, which would emphasize that it’s an object.
+Shouldn’t use struct node, use pointer to node (Node_T) instead to
+reinforce the idea of the node as an object.
+- Path_getSharedPrefixDepth
+Should have a meaningful name for i because it is used a lot in the second
+half of the function.
+
 
 ------------------------------------------------------------------------
