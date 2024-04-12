@@ -207,7 +207,7 @@ size_t Node_free(Node_T oNNode)
 
    assert(oNNode != NULL);
 
-   /* remove from parent's list */
+   /* Remove from parent's list */
    if (oNNode->oNParent != NULL)
    {
       if (DynArray_bsearch(
@@ -218,7 +218,7 @@ size_t Node_free(Node_T oNNode)
                                  ulIndex);
    }
 
-   /* if it's a directory, recursively remove children */
+   /* If it's a directory, recursively remove children */
    if (!Node_isFile(oNNode))
    {
       while (DynArray_getLength(oNNode->oDChildren) != 0)
@@ -228,10 +228,10 @@ size_t Node_free(Node_T oNNode)
       DynArray_free(oNNode->oDChildren);
    }
 
-   /* remove path */
+   /* Remove path */
    Path_free(oNNode->oPPath);
 
-   /* finally, free the struct node */
+   /* Finally, free the struct node */
    free(oNNode);
    ulCount++;
    return ulCount;
@@ -244,8 +244,8 @@ Path_T Node_getPath(Node_T oNNode)
    return oNNode->oPPath;
 }
 
-/* we attempted to make this simpler by using char *pcPath
-instead of Path_T oPPath */
+/* We attempted to make this simpler by using char *pcPath
+   instead of Path_T oPPath */
 boolean Node_hasChild(Node_T oNParent, const char *pcPath,
                       size_t *pulChildID)
 {
@@ -308,7 +308,7 @@ char *Node_toString(Node_T oNNode)
       return strcpy(copyPath, Path_getPathname(Node_getPath(oNNode)));
 }
 
-/* new functions for nodeFT */
+/* New functions for nodeFT */
 boolean Node_isFile(Node_T oNNode)
 {
    assert(oNNode != NULL);
@@ -318,14 +318,14 @@ boolean Node_isFile(Node_T oNNode)
 void *Node_getFileContents(Node_T oNNode)
 {
    assert(oNNode != NULL);
-   /* if the given node is a directory, pvContents will be NULL */
+   /* If the given node is a directory, pvContents will be NULL */
    return oNNode->pvContents;
 }
 
 size_t Node_getFileSize(Node_T oNNode)
 {
    assert(oNNode != NULL);
-   /* if the given node is a directory, ulLength will be 0 */
+   /* If the given node is a directory, ulLength will be 0 */
    return oNNode->ulLength;
 }
 
@@ -335,14 +335,12 @@ void *Node_replaceFileContents(Node_T oNNode, void *pvNewContents,
    void *pvOldContents;
    assert(oNNode != NULL);
 
-   /* prevents us from accidentally giving directories non-null
-   pvContents and ulLength */
+   /* Prevents us from accidentally giving directories non-null
+      pvContents and ulLength */
    if (!Node_isFile(oNNode))
-   {
       return NULL;
-   }
 
-   /* not a directory - replace pvContents and ulLength */
+   /* Not a directory - replace pvContents and ulLength */
    pvOldContents = oNNode->pvContents;
    oNNode->pvContents = pvNewContents;
    oNNode->ulLength = ulNewLength;
