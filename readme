@@ -200,7 +200,7 @@ splint warnings:
 ulChildID in DT_traversePath and ulIndex in nodeDTGood.c
 
 critTer warnings:
-- Overall, there are several long loops
+- Some missing asserts for non NULL parameters.
 
 Questionable naming conventions/parameter order:
 - Dynarray addAt, removeAt, toArray, search
