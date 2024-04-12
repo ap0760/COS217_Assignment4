@@ -195,6 +195,13 @@ though one could argue that it is worth keeping as a function that
 a potential client may want to use.
 The same is true of Path_getComponent.
 
+splint warnings:
+- There are several variables used before definition, specifically
+ulChildID in DT_traversePath and ulIndex in nodeDTGood.c
+
+critTer warnings:
+- Overall, there are several long loops
+
 Questionable naming conventions/parameter order:
 - Dynarray addAt, removeAt, toArray, search
 There is a variable named “u” used as the array index variable. This
