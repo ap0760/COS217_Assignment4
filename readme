@@ -186,8 +186,9 @@ the error manifests itself or is "noticed" by the client.
 What are your critiques of the given DT implementations, as
 specified in Step 2.5?
 
-- There are many modules which are #included both in a .h file and
-in the corresponding .c file. This is redundant and inefficient.
+- There are many modules which are #included both in a header file
+and in the corresponding implementation. This is redundant and
+inefficient.
 - Node_compare is not used outside of the Node module. Given the
 current implementation it should therefore be declared as static,
 though one could argue that it is worth keeping as a function that
