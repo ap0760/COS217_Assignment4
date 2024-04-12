@@ -177,7 +177,8 @@ the error manifests itself or is "noticed" by the client.
 What are your critiques of the given DT implementations, as
 specified in Step 2.5?
 
-
+There are many modules which are #included both in a .h file and in
+the corresponding .c file. This is redundant and inefficient.
 
 Questionable naming conventions/parameter order:
 - Dynarray addAt, removeAt, toArray, search
