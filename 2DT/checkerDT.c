@@ -114,7 +114,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t *pulNodeCount)
       if (!CheckerDT_Node_isValid(oNNode))
          return FALSE;
 
-      /* Check that if a node has multiple children, those children are unique */
+      /* Check that if a node has multiple children, those
+         children are unique */
       if (!CheckerDT_siblingsCorrect(oNNode))
          return FALSE;
 

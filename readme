@@ -22,7 +22,8 @@ The course's precepts.
 The course's website.
 Documents that are referenced directly by the course's website. Such
 documents include the course's lecture slides and precept handouts.
-The course's current staff members outside of class time through office hours.
+The course's current staff members outside of class time through 
+office hours.
 The course's current staff members outside of class time through Ed.
 Current Intro Lab TAs through visits to the Intro COS Lab.
 
@@ -38,7 +39,8 @@ The course's precepts.
 The course's website.
 Documents that are referenced directly by the course's website. Such
 documents include the course's lecture slides and precept handouts.
-The course's current staff members outside of class time through office hours.
+The course's current staff members outside of class time through 
+office hours.
 The course's current staff members outside of class time through Ed.
 Current Intro Lab TAs through visits to the Intro COS Lab.
 
@@ -96,15 +98,18 @@ warnings, then write "None."
 All of these warnings are a result of the code that was given to us.
 dtGood.c: (in function DT_traversePath)
 dtGood.c:94:42: Variable ulChildID used before definition
-An rvalue is used that may not be initialized to a value on some execution
-path. (Use -usedef to inhibit warning)
+An rvalue is used that may not be initialized to a value on some 
+execution path. (Use -usedef to inhibit warning)
 nodeDTGood.c: (in function Node_new)
 nodeDTGood.c:148:48: Variable ulIndex used before definition
 nodeDTGood.c: (in function Node_free)
 nodeDTGood.c:180:35: Variable ulIndex used before definition
-path.h:94:13: Function exported but not used outside path: Path_getComponent
-A declaration is exported, but not used outside this module. Declaration can
-use static qualifier. (Use -exportlocal to inhibit warning)
+path.h:94:13: Function exported but not used outside path: 
+Path_getComponent
+A declaration is exported, but not used outside this module. 
+Declaration can use static qualifier. 
+(Use -exportlocal to inhibit warning)
+
 path.c:316:1: Definition of Path_getComponent
 
 ------------------------------------------------------------------------
@@ -122,9 +127,13 @@ express your disagreement after each warning. If there are no
 warnings, then write "None."
 
 The only warnings we got were results of repurposing the given DT code.
-path.h:94:13: Function exported but not used outside path: Path_getComponent
-  A declaration is exported, but not used outside this module. Declaration can
-  use static qualifier. (Use -exportlocal to inhibit warning)
+path.h:94:13: Function exported but not used outside path:
+ Path_getComponent
+
+  A declaration is exported, but not used outside this module. 
+  Declaration can use static qualifier. 
+  (Use -exportlocal to inhibit warning)
+
    path.c:316:1: Definition of Path_getComponent
 
 ------------------------------------------------------------------------
@@ -209,14 +218,14 @@ then child or both child then index).
 There should be a consistent parameter order. Either the path is always
 first or the parent is always first.
 - Node_new
-The new node is called psNew. This is not a good name because the new node
-is an object, which should be differentiated from pointers to structs. A
-better name would be oNNewNode, which would emphasize that it’s an object.
-Shouldn’t use struct node, use pointer to node (Node_T) instead to
-reinforce the idea of the node as an object.
+The new node is called psNew. This is not a good name because the 
+new node is an object, which should be differentiated from pointers 
+to structs. A better name would be oNNewNode, which would emphasize 
+that it’s an object. Shouldn’t use struct node, use pointer to node 
+(Node_T) instead to reinforce the idea of the node as an object.
 - Path_getSharedPrefixDepth
-Should have a meaningful name for i because it is used a lot in the second
-half of the function.
+Should have a meaningful name for i because it is used a lot in 
+the second half of the function.
 
 
 ------------------------------------------------------------------------
